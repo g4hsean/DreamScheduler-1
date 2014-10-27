@@ -12,7 +12,50 @@ namespace DreamSchedulerApp.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["User"] != null)
+            {
+                if ((string)Session["User"] == "admin")//if user is admin
+                {
+                    return RedirectToAction("HomeAdmin", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Home", "Home");
+                }
+            }
             return View();
+        }
+
+        //home for logged in user
+        public ActionResult Home()
+        {
+            if (Session["User"] != null)
+            {
+                if((string)Session["User"] == "admin")
+                {
+                    return RedirectToAction("HomeAdmin", "Home");//redirect admin to correct home page
+                }
+                else
+                    return View(); //normal user 
+            }
+            return RedirectToAction("Index"); //user tried to use direct url to Home but isn't logged in  
+        }
+        //admin home
+        public ActionResult HomeAdmin()
+        {
+            if (Session["User"] != null)
+            {
+                if((string)Session["User"] == "admin")
+                {
+                    return View();
+                }
+                else
+                    return RedirectToAction("Index", "home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "home");
+            }
         }
 
         public ActionResult About()
@@ -22,35 +65,98 @@ namespace DreamSchedulerApp.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Account()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            if (Session["User"] != null)
+                return View();
+            else
+                return RedirectToAction("index");
         }
 
-        public ActionResult StudentRecord()
+        ///////SCHEDULER////////////////////////////////////////////////////////////////////////////////
+        public ActionResult Scheduler()
         {
-            
-            //if user is  logged in 
-            if(Session["User"] != null)
+            if (Session["User"] != null & (string)Session["User"] != "admin")
             {
                 return View();
             }
             else
             {
-                ViewBag.popup = "notlogged";
-                return View("index");
+                return RedirectToAction("index");
             }
         }
-        
-        public ActionResult Logout()
-        {
-            Session.Clear();
-            return Redirect("index");
 
+
+
+
+        //show sequence page
+        public ActionResult Sequence()
+        {
+            if(Session["User"] != null & (string)Session["User"] != "admin")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("index");
+            }
+        }
+        //show professor page
+        public ActionResult Professors()
+        {
+            if (Session["User"] != null & (string)Session["User"] != "admin")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("index");
+            }
+        }
+        //show courses page
+        public ActionResult Courses()
+        {
+            if (Session["User"] != null & (string)Session["User"] != "admin")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("index");
+            }
         }
 
+        //show student record page
+        public ActionResult StudentRecord()
+        {
+            
+            //if user is  logged in and is not admin
+            if(Session["User"] != null & (string)Session["User"] != "admin")
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        //show database page
+        public ActionResult Database()
+        {
+            if((string)Session["User"] == "admin")
+            {
+                return View();
+            }
+            return RedirectToAction("index");
+        }
+        
+
+
+        //Login & create account & logout /////////////////////////////////////////////////////////////////////////////
+        public ActionResult Login()
+        {
+            return View();
+        }
         [HttpPost]
         public ActionResult LoginValidation(LoginTest test)
         {
@@ -77,7 +183,7 @@ namespace DreamSchedulerApp.Controllers
                     {
                         //if user is logged in, create session
                         Session["User"] = query.Single().Username;
-                        return RedirectToAction("About");
+                        return RedirectToAction("index");
                     }
                     else
                     {
@@ -119,50 +225,16 @@ namespace DreamSchedulerApp.Controllers
                     .Create("(Account:Account {newAcount})")
                     .WithParam("newAcount", newAccount)//against cypher-injection 
                     .ExecuteWithoutResults();
-                return RedirectToAction("About");
+                return RedirectToAction("Login");
             }
             // model is not valid
             return View("Create", test);
         }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //DEMO FOR CONNECTION STORE/RETRIEVE DATABASE
-        public ActionResult Database()   //if you want to test this out  just do http://localhost:6437/home/Database   
+        public ActionResult Logout()
         {
-            GraphClient client = new GraphClient(new Uri("http://localhost:7474/db/data"));
-            client.Connect();
+            Session.Clear();
+            return Redirect("index");
 
-            var newUser = new User { Id = 123, Name = "Jim" };
-            // create the user in the database
-            client.Cypher
-                .Create("(user:User {newUser})")
-                .WithParam("newUser", newUser)//against cypher-injection 
-                .ExecuteWithoutResults();
-
-            //find user in database
-            var query = client
-                .Cypher
-                .Match("(user:User)")
-                .Where((User user) => user.Id == 456)
-                .Return(user => user.As<User>());
-            var result = query.Results.Single();
-            ViewBag.name = result.Name; //viewbag is used to send info to view 
-            ViewBag.id = result.Id;
-
-
-            return View();
         }
-
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-
-
-
-
     }
 }

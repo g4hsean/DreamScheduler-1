@@ -134,6 +134,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\contactlogo.png" />
     <Content Include="Content\images\courselogo.png" />
+    <Content Include="Content\images\icons\book14.png" />
+    <Content Include="Content\images\icons\calendar5.png" />
+    <Content Include="Content\images\icons\curriculum.png" />
     <Content Include="Content\images\sequencelogo.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -165,13 +168,19 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Database.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Home\StudentRecord.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
+    <Content Include="Views\Home\HomeAdmin.cshtml" />
+    <Content Include="Views\Home\Account.cshtml" />
+    <Content Include="Views\Home\Sequence.cshtml" />
+    <Content Include="Views\Home\Professors.cshtml" />
+    <Content Include="Views\Home\Courses.cshtml" />
+    <Content Include="Views\Home\Scheduler.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

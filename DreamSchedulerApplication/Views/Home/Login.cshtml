@@ -5,42 +5,58 @@
 }
 
 
-<div class="container">
-    <div class="row">
 
-        <div class="col-md-6">
+<div class="row">
+    <h2>Login</h2>
+    <div class="col-md-4">
+        <!--empty-->
+    </div>
 
-            <!--login form-->
-            @using (Html.BeginForm("LoginValidation", "Home"))
-            {
-                <fieldset>
-                    @Html.Label("Login")
-                    <br />
-                    <br />
-                    @Html.LabelFor(model => model.Username)
-                    @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })  
-                    <b class="alert-danger">@ViewBag.errorUsername</b>
-                    <b class="alert-warning">@Html.ValidationMessageFor(model => model.Username)</b>
-                    <br />
-                    @Html.LabelFor(model => model.Password)
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                    <b class="alert-warning">@ViewBag.errorPassword</b>
-                    <b class="alert-warning">@Html.ValidationMessageFor(model => model.Password)</b>
-                    <br />
-                    <br />
-                    <p><button class="btn btn-primary" type="submit">Sign in</button></p>
-                </fieldset>
-            }
-            @{Html.EndForm();}
+    <div class="col-md-4">
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+            <li class="active"><a href="#home" role="tab" data-toggle="tab">Login</a></li>
+            <li><a href="#settings" role="tab" data-toggle="tab">New Account</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <!--login form-->
+                @using (Html.BeginForm("LoginValidation", "Home"))
+                {
+                    <fieldset>
+
+                        <br />
+                        <br />
+                        @Html.LabelFor(model => model.Username)
+                        @Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+                        <b class="alert-danger">@ViewBag.errorUsername</b>
+                        <b class="alert-warning">@Html.ValidationMessageFor(model => model.Username)</b>
+                        <br />
+                        @Html.LabelFor(model => model.Password)
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                        <b class="alert-warning">@ViewBag.errorPassword</b>
+                        <b class="alert-warning">@Html.ValidationMessageFor(model => model.Password)</b>
+                        <br />
+                        <br />
+                        <p><button class="btn btn-primary" type="submit">Sign in</button></p>
+                    </fieldset>
+                }
+                @{Html.EndForm();}
+            </div>
+            <div class="tab-pane" id="settings">
+                <br />
+                <a href="@Url.Action("Create", "Home")" class="btn btn-primary btn-block" role="button">Create Account</a>
+            </div>
         </div>
 
-        <div class="col-md-6">
-            <br />
-            <br />
-            <!--@Html.ActionLink("Create account Page", "Create")-->
-            <input type="button" class="btn btn-primary btn-lg btn-block" value=" create account" onclick="location.href='@Url.Action("Create", "Home" )'" />
-            
-        </div>
+        <script>
+            $(function () {
+                $('#myTab a:last').tab('show')
+            })
+        </script>
+
+    </div>
+    <div class="col-md-4">
 
     </div>
 </div>

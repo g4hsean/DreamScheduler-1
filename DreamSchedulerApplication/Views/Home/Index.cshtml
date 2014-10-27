@@ -3,52 +3,92 @@
 }
 
 <div class="jumbotron">
-    <h1>INDEX PAGE - Home</h1>
+    <h1>Welcome to DreamScheduler</h1>
 
-
- 
-   <!--testing popup if user try to access a page without being logged in... i will try to find another way using mvc -->
-    @{
-        if (ViewBag.popup == "notlogged")
-        {
-            <script>alert("Access Restricted to user only");</script>
-        }
-    }
-    
-    
-   
-    
 </div>
 
 <div class="row">
-    <div class="col-sm-6 col-md-4">
+    <div class="col-xs-6">
         <div class="text-center">
-            <br/>
-            <img src="~/Content/images/sequencelogo.png" alt="...">
-            <div class="caption" >
-                <h2>Make sequence</h2>
-                <p><a href="#" class="btn btn-success" role="button">Button</a></p>
+            <br />
+            <img src="~/Content/images/icons/calendar5.png" style=" width:35%; height:35%" alt="...">
+            <div class="caption">
+                <h4>Dynamic <br />course sequence</h4>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-4">
-        <div class="text-center">
-            <br/>
-            <img src="~/Content/images/courselogo.png" alt="...">
-            <div class="caption">
-                <h2>Browse Courses</h2>
-                <p><a href="#" class="btn btn-success" role="button">Button</a></p>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4">
-        <div class="text-center">
-            <br/>
-            <img src="~/Content/images/contactlogo.png" alt="...">
-            <div class="caption">
-                <h2>Browse Professors</h2>
-                <p><a href="#" class="btn btn-success" role="button">Button</a></p>
-            </div>
+    <div class="col-xs-6">
+        <div>
+            <p class="text-left">
+
+                <h2>Course sequence problems?</h2>
+                <ul class="list-unstyled">
+                    <li><span class="glyphicon glyphicon-check"></span> You don't know which course to take.</li>
+                    <li><span class="glyphicon glyphicon-check"></span> You want to study part time.</li>
+                    <li><span class="glyphicon glyphicon-check"></span> You are wondering if you could have a day off to work</li>
+                    <li><span class="glyphicon glyphicon-check"></span> You failed or dropped a course.</li>
+                </ul>
+                <h3>View your own course sequence</h3>
+                DreamScheduler was built to give you the possiblity of creating a dynamic course sequence based on your specific needs.
+            </p>
         </div>
     </div>
 </div>
+
+<br />
+<!--second row-->
+<div class="row">
+    <div class="text-center">
+        <h2>Information about</h2>
+    </div>
+</div>
+
+<!--third row-->
+<div class="row">
+    <div class="col-xs-6">
+        <div class="text-center">
+            <br />
+            <img src="~/Content/images/icons/book14.png" style=" width:30%; height:35%" alt="...">
+            <div class="caption">
+                <h4></h4>
+            </div>
+            <div>
+                <h2>Availaible Courses</h2>
+                <ul class="list-unstyled">
+                    <li><span class="glyphicon glyphicon-star"></span> Description</li>
+                    <li><span class="glyphicon glyphicon-star"></span> Prerequisites</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="text-center">
+            <br />
+            <img src="~/Content/images/icons/curriculum.png" style=" width:25%; height:25%" alt="...">
+            <div class="caption">
+                <h4></h4>
+            </div>
+        </div>
+        <div class="text-center">
+            <h2>Professors</h2>
+            <ul class="list-unstyled">
+                <li><span class="glyphicon glyphicon-star"></span> Contact information</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+
+        <input type="button" class="btn btn-primary btn-lg btn-block" value="Join" onclick="location.href='@Url.Action("Login", "Home" )'" />
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
