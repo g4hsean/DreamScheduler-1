@@ -1,0 +1,34 @@
+﻿@model DreamSchedulerApplication.Models.AcademicRecord
+@{
+    ViewBag.Title = "AccountEDIT";
+    ViewBag.Username = Session["User"];
+}
+
+<h2>Account Page</h2>
+
+<p>Username:  @ViewBag.Username</p>
+<p>StudentID : @Html.DisplayFor(model => model.Student.StudentID)</p>
+<p>First Name:@Html.DisplayFor(model => model.Student.FirstName)</p>
+<p>Last Name: @Html.DisplayFor(model => model.Student.LastName)</p>
+
+<a>EDIT</a>
+
+@using (Html.BeginForm("AccountEdit", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        @Html.LabelFor(model =>model.Student.FirstName)
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Student.FirstName)
+            @Html.ValidationMessageFor(model =>model.Student.FirstName)
+        </div>
+        @Html.LabelFor(model => model.Student.LastName)
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Student.LastName)
+            @Html.ValidationMessageFor(model => model.Student.LastName)
+        </div>
+        <div>
+            <input type="submit" value="save" />
+        </div>
+    </fieldset>
+}

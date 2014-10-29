@@ -16,26 +16,26 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("DreamScheduler", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("DreamScheduler", "Index", User.Identity.Name, new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <!--if else statement : if user show user nav tab, if admin show different nav tab-->
                 @{
                     if (Session["User"] != null)
                     {
-                        if ((string)Session["User"] == "admin")
+                        if (User.Identity.Name == "Admin")
                         {
                             <ul class="nav navbar-nav">
-                                <li>@Html.ActionLink("Home", "HomeAdmin", "Home")</li>
-                                <li>@Html.ActionLink("Database", "Database", "Home")</li>
+                                <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+                                <li>@Html.ActionLink("Database", "Database", "Admin")</li>
                             </ul>
                         }
                         else
                         {
                             <ul class="nav navbar-nav">
-                                <li>@Html.ActionLink("Home", "Home", "Home")</li>
-                                <li>@Html.ActionLink("Sequence", "Sequence", "Home")</li>
-                                <li>@Html.ActionLink("StudentRecord", "StudentRecord", "Home")</li>
+                                <li>@Html.ActionLink("Home", "Index", "Member")</li>
+                                <li>@Html.ActionLink("Sequence", "CourseSequence", "Member")</li>
+                                <li>@Html.ActionLink("StudentRecord", "AcademicRecord", "Member")</li>
                             </ul>
                         }
                     }
@@ -47,18 +47,19 @@
                         @{
                             if (Session["User"] == null)
                             {
-                                <a href="@Url.Action("Login", "Home")"><b>Login</b></a>
+                                <a href="@Url.Action("Login", "Account")"><b>Login</b></a>
                             }
                             else
                             {
                                 //user is logged in, output username
                                 ViewBag.SessionUser = Session["User"];
-                                <a href="#" data-toggle="dropdown" class="dropdown-toggle"><b>@ViewBag.SessionUser</b><b class="caret"></b></a>
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle"><b>@ViewBag.SessionUser
+                                    </b><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="@Url.Action("Account", "Home")">MyAccount</a></li>
                                     <li><a href="#">action</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+                                    <li><a href="@Url.Action("LogOff", "Account")">Logout</a></li>
                                 </ul>
                             }
                         }

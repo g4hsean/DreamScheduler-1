@@ -1,7 +1,15 @@
 ﻿
+@model DreamSchedulerApplication.Models.AcademicRecord
 @{
     ViewBag.Title = "Account";
+    ViewBag.Username =Session["User"] ;
 }
 
 <h2>Account Page</h2>
 
+<p>Username:  @ViewBag.Username</p>
+<p>StudentID : @Html.DisplayFor(model => model.Student.StudentID)</p>
+<p>First Name:@Html.DisplayFor(model => model.Student.FirstName)</p>
+<p>Last Name: @Html.DisplayFor(model => model.Student.LastName)</p>
+
+<a href="@Url.Action("AccountEdit", "Home")">EDIT</a>
