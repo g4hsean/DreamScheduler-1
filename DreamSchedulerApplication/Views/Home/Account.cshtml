@@ -1,15 +1,48 @@
-﻿
-@model DreamSchedulerApplication.Models.AcademicRecord
+﻿@model DreamSchedulerApplication.Models.AcademicRecord
 @{
     ViewBag.Title = "Account";
-    ViewBag.Username =Session["User"] ;
+    ViewBag.Username = Session["User"];
 }
 
 <h2>Account Page</h2>
 
-<p>Username:  @ViewBag.Username</p>
-<p>StudentID : @Html.DisplayFor(model => model.Student.StudentID)</p>
-<p>First Name:@Html.DisplayFor(model => model.Student.FirstName)</p>
-<p>Last Name: @Html.DisplayFor(model => model.Student.LastName)</p>
 
-<a href="@Url.Action("AccountEdit", "Home")">EDIT</a>
+
+<div class ="form-horizontal"  role="form">
+    @Html.AntiForgeryToken()
+    <h4>Information</h4>
+    <br />
+    <br/>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Student.FirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Student.FirstName, new { @class = "form-control", @readonly = "readonly"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Student.LastName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Student.LastName, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Student.StudentID, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Student.StudentID, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Student.GPA, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Student.GPA, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+        </div>
+    </div>
+</div>
+
+
+

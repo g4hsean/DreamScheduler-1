@@ -29,7 +29,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect to database
             var student = client.Cypher
                          .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "1941097")//testing
+                         .Where((Student s) => s.StudentID == "123")//testing
                          .Return((s) => s.As<Student>())
                          .Results.FirstOrDefault();
 
@@ -44,7 +44,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect to database
             var student = client.Cypher
                          .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "1941097")//testing
+                         .Where((Student s) => s.StudentID == "123")//testing
                          .Return((s) => s.As<Student>())
                          .Results.FirstOrDefault();
             academicRecord.Student = student;
@@ -61,7 +61,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect database
             client.Cypher
                 .Match("(s:Student)")
-                .Where((Student s) => s.StudentID == "1941097") //it was supposed to be model.Student.StudentID  but it couldn't find because all my value are null from POST... weird  When i used the Id, it replace all the value in database with null(empty)... so i know that query work lol but something is wrong with my HTML POST submit
+                .Where((Student s) => s.StudentID == "123") //it was supposed to be model.Student.StudentID  but it couldn't find because all my value are null from POST... weird  When i used the Id, it replace all the value in database with null(empty)... so i know that query work lol but something is wrong with my HTML POST submit
                 .Set("s = {student}")
                 .WithParam("student", new Student { StudentID = teststudent.StudentID, FirstName = teststudent.FirstName, LastName = teststudent.LastName, GPA = teststudent.GPA })
                 .ExecuteWithoutResults();

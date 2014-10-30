@@ -129,8 +129,8 @@ namespace DreamSchedulerApplication.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+       
+        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             Session.Clear();

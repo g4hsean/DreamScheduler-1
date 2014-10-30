@@ -8,7 +8,7 @@ namespace DreamSchedulerApplication.Models
 {
     public class AcademicRecord
     {
-        public Student Student;
+        public Student Student {get; set;}
 
         public IEnumerable<CourseEntry> CompletedCourses;
 

@@ -28,7 +28,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect to database
             var student = client.Cypher
                          .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "1941097")
+                         .Where((Student s) => s.StudentID == "123")
                          .Return((s) => s.As<Student>())
                          .Results.FirstOrDefault();
 
@@ -37,7 +37,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect to database
             academicRecord.CompletedCourses = client.Cypher
                          .Match("(s:Student)-[r:Completed]->(c:Course)")
-                         .Where((Student s) => s.StudentID == "1941097")
+                         .Where((Student s) => s.StudentID == "123")
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Course = c.As<Course>(),
