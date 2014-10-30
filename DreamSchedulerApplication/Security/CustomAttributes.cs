@@ -2,6 +2,8 @@
 using System.Web.Mvc.Filters;
 using DreamSchedulerApplication;
 using System.Web.Security;
+using DreamSchedulerApplication.getCookieInfo;
+using System;
 
 namespace DreamSchedulerApplication.CustomAttributes
 {
@@ -13,9 +15,15 @@ namespace DreamSchedulerApplication.CustomAttributes
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
+            var test = new SecurityInformation();
+            string myname = test.CurrentUserName;
+            string myrole = test.CurrentUserRole;
+
+
+
             var user = filterContext.HttpContext.User;
 
-            if (user == null || !user.Identity.IsAuthenticated) //null or not authenticated
+            if (user == null || myrole== null/*!user.Identity.IsAuthenticated*/) //null or not authenticated
             {
                 // filterContext.Result = new HttpUnauthorizedResult();
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
@@ -25,20 +33,28 @@ namespace DreamSchedulerApplication.CustomAttributes
     }
     public class AdminAttribute : ActionFilterAttribute, IAuthenticationFilter
     {
+        
+           
+
         public void OnAuthentication(AuthenticationContext filterContext)
         {
         }
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
+            var test = new SecurityInformation();
+            string myname = test.CurrentUserName;
+            string myrole = test.CurrentUserRole;
 
-            var user = filterContext.HttpContext.User;
 
-            if (!user.Identity.IsAuthenticated || user == null)
+            var user = filterContext.HttpContext.User.Identity.Name;
+            
+
+            if (/*!user.Identity.IsAuthenticated*/ myrole == null || user == null)
             {
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
             }
-            else if (user.Identity.IsAuthenticated && user.Identity.Name!= "Admin")
+            else if (/*user.Identity.IsAuthenticated && user.Identity.Name!= "Admin"*/ myrole != "Admin")
             {
                 //for testing
                 //bool trueorfalse = user.Identity.IsAuthenticated;
@@ -57,12 +73,17 @@ namespace DreamSchedulerApplication.CustomAttributes
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
+            var test = new SecurityInformation();
+            string myname = test.CurrentUserName;
+            string myrole = test.CurrentUserRole;
+
+
             var user = filterContext.HttpContext.User;
             
-            if(!user.Identity.IsAuthenticated || user == null)
+            if(/*!user.Identity.IsAuthenticated*/ myrole == null || user == null)
             {
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
-            } else if (user.Identity.IsAuthenticated && user.Identity.Name != "Member")
+            } else if (/*user.Identity.IsAuthenticated &&user.Identity.Name*/ myrole != "Member")
             {
                 //for testing
                 //bool trueorfalse = user.Identity.IsAuthenticated;

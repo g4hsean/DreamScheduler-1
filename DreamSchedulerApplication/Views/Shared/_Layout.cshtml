@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using DreamSchedulerApplication.getCookieInfo;
+@{
+    var test = new SecurityInformation();
+    string myrole = test.CurrentUserRole;
+    string myname = test.CurrentUserName;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,14 +22,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("DreamScheduler", "Index", User.Identity.Name, new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("DreamScheduler", "Index", myrole, new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <!--if else statement : if user show user nav tab, if admin show different nav tab-->
                 @{
-                    if (Session["User"] != null)
+                    
+                    if (/*Session["User"]*/ myrole != null)
                     {
-                        if (User.Identity.Name == "Admin")
+                        if ( myrole== "Admin")
                         {
                             <ul class="nav navbar-nav">
                                 <li>@Html.ActionLink("Home", "Index", "Admin")</li>
@@ -44,15 +51,20 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="nav navbar-nav navbar-right">
                         <!--MAGIC...  check if user is logged in, if no link to login, else show username and dropdown list-->
+                       
                         @{
-                            if (Session["User"] == null)
+                            
+                            if (myname ==null)//["User"] == null)
                             {
                                 <a href="@Url.Action("Login", "Account")"><b>Login</b></a>
                             }
                             else
                             {
+                                
+
+                        
                                 //user is logged in, output username
-                                ViewBag.SessionUser = Session["User"];
+                                ViewBag.SessionUser = myname;//Session["User"];
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle"><b>@ViewBag.SessionUser
                                     </b><b class="caret"></b></a>
                                 <ul class="dropdown-menu">

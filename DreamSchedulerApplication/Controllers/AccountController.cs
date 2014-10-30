@@ -62,11 +62,13 @@ namespace DreamSchedulerApplication.Controllers
                     //if user is admin send him to admin controllwe
                     if (user.Role == "Admin")
                     {
-                        FormsAuthentication.SetAuthCookie(user.Role, false);
+                        //FormsAuthentication.SetAuthCookie(user.Role, false);
+                        FormsAuthentication.SetAuthCookie(user.Role + "|" + user.Username, false);
                         return RedirectToAction("Index", "Admin");
                     }
                     //else send him to member controller
-                    FormsAuthentication.SetAuthCookie(user.Role, false);
+                    //FormsAuthentication.SetAuthCookie(user.Role, false);
+                    FormsAuthentication.SetAuthCookie(user.Role + "|" + user.Username, false);
                     return RedirectToAction("Index", "Member");// index, student
                 }
                 else
