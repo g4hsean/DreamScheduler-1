@@ -28,7 +28,7 @@
                 <!--if else statement : if user show user nav tab, if admin show different nav tab-->
                 @{
                     
-                    if (/*Session["User"]*/ myrole != null)
+                    if (User.Identity.IsAuthenticated)
                     {
                         if ( myrole== "Admin")
                         {
@@ -54,7 +54,7 @@
                        
                         @{
                             
-                            if (myname ==null)//["User"] == null)
+                            if (!User.Identity.IsAuthenticated)//["User"] == null)
                             {
                                 <a href="@Url.Action("Login", "Account")"><b>Login</b></a>
                             }
