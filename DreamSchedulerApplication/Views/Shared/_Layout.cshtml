@@ -1,8 +1,8 @@
-﻿@using DreamSchedulerApplication.getCookieInfo;
+﻿@using DreamSchedulerApplication.Security;
 @{
-    var test = new SecurityInformation();
-    string myrole = test.CurrentUserRole;
-    string myname = test.CurrentUserName;
+    var data = new PrivateData();
+    string myrole = data.GetUserRole();
+    string myname =  HttpContext.Current.User.Identity.Name;
 }
 <!DOCTYPE html>
 <html>
@@ -54,7 +54,7 @@
                        
                         @{
                             
-                            if (!User.Identity.IsAuthenticated)//["User"] == null)
+                            if (!User.Identity.IsAuthenticated)
                             {
                                 <a href="@Url.Action("Login", "Account")"><b>Login</b></a>
                             }
@@ -64,7 +64,7 @@
 
                         
                                 //user is logged in, output username
-                                ViewBag.SessionUser = myname;//Session["User"];
+                                ViewBag.SessionUser = myname;
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle"><b>@ViewBag.SessionUser
                                     </b><b class="caret"></b></a>
                                 <ul class="dropdown-menu">

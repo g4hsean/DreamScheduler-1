@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using DreamSchedulerApplication.CustomAttributes;
 using DreamSchedulerApplication.Models;
 using Neo4jClient;
+using DreamSchedulerApplication.Security;
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -26,9 +27,12 @@ namespace DreamSchedulerApplication.Controllers
         {
             var academicRecord = new AcademicRecord();
             client.Connect();//connect to database
+
+            string userID = new PrivateData().GetStudentID();
+
             var student = client.Cypher
                          .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "123")
+                         .Where((Student s) => s.StudentID == userID)
                          .Return((s) => s.As<Student>())
                          .Results.FirstOrDefault();
 
@@ -37,7 +41,7 @@ namespace DreamSchedulerApplication.Controllers
             client.Connect();//connect to database
             academicRecord.CompletedCourses = client.Cypher
                          .Match("(s:Student)-[r:Completed]->(c:Course)")
-                         .Where((Student s) => s.StudentID == "123")
+                         .Where((Student s) => s.StudentID == userID)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Course = c.As<Course>(),

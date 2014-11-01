@@ -1,7 +1,12 @@
 ﻿@model DreamSchedulerApplication.Models.AcademicRecord
+@using DreamSchedulerApplication.Security;
 @{
     ViewBag.Title = "Account";
-    ViewBag.Username = Session["User"];
+
+    var auth = new PrivateData();
+    string role = auth.GetUserRole();
+    
+    
 }
 
 <h2>Account Page</h2>
@@ -25,23 +30,40 @@
             @Html.TextBoxFor(m => m.Student.LastName, new { @class = "form-control", @readonly = "readonly" })
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Student.StudentID, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Student.StudentID, new { @class = "form-control", @readonly = "readonly" })
+
+    @{if (role == "Admin")
+    {
+        // no id and gpa
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Student.GPA, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Student.GPA, new { @class = "form-control", @readonly = "readonly" })
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Student.StudentID, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Student.StudentID, new { @class = "form-control", @readonly = "readonly" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Student.GPA, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Student.GPA, new { @class = "form-control", @readonly = "readonly" })
+            </div>
         </div>
-    </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+            </div>
+        </div>
+    }
+
+    }
+
+    
 </div>
 
 

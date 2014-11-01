@@ -7,6 +7,7 @@ using DreamSchedulerApplication.Libraries;
 using DreamSchedulerApplication.CustomAttributes;
 using System.Web.Security;
 using System.Security.Principal;
+using DreamSchedulerApplication.Security;
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -62,13 +63,11 @@ namespace DreamSchedulerApplication.Controllers
                     //if user is admin send him to admin controllwe
                     if (user.Role == "Admin")
                     {
-                        //FormsAuthentication.SetAuthCookie(user.Role, false);
-                        FormsAuthentication.SetAuthCookie(user.Role + "|" + user.Username, false);
+                        FormsAuthentication.SetAuthCookie(user.Username, false);
                         return RedirectToAction("Index", "Admin");
                     }
                     //else send him to member controller
-                    //FormsAuthentication.SetAuthCookie(user.Role, false);
-                    FormsAuthentication.SetAuthCookie(user.Role + "|" + user.Username, false);
+                    FormsAuthentication.SetAuthCookie(user.Username, false);
                     return RedirectToAction("Index", "Member");// index, student
                 }
                 else
@@ -98,30 +97,50 @@ namespace DreamSchedulerApplication.Controllers
             if (ModelState.IsValid)
             {
                 var encryptedPassword = PasswordHash.CreateHash(model.Password);
-                var newUser = new User { Username = model.Username, Password = encryptedPassword, Role ="Member"}; //for admin, need to manually add usimh
+                var newUser = new User { Username = model.Username, Password = encryptedPassword, Role ="Member"}; //for admin, need to manually add a script command
+                //MATCH (u:User {Username:'michel'}) SET u.Role = 'Admin'     
+                // this will change user role from Member to Admin 
 
                 var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, GPA = model.GPA };
 
-                // create the account in the database
-                try
-                {
-                    client.Connect();//connect to database
-                    client.Cypher
-                                .Create("(u:User {newAccount})-[:IsA]->(s:Student {newStudent})")
-                                .WithParam("newAccount", newUser)
-                                .WithParam("newStudent", newStudent)
-                                .ExecuteWithoutResults();
-                }
-                catch (Neo4jClient.NeoException exception)
-                {
-                    if (exception.Message.Contains("Username")) { ViewBag.Message = "User with such username already exists"; return View("Register"); }
-                    else if (exception.Message.Contains("StudentID")) { ViewBag.Message = "Student with such student ID number already exists"; return View("Register"); }
-                    else throw exception;
-                }
+                var user = new PrivateData();
 
+                //Protection again multiple account with same id/username
+                if (user.UserUnique(model.Username)) //user is unique
+                {
+                    if(user.IdUnique(model.StudentID))//id is unique
+                    {
+                        // create the account in the database
+                        try
+                        {
+                            client.Connect();//connect to database
+                            client.Cypher
+                                        .Create("(u:User {newAccount})-[:IsA]->(s:Student {newStudent})")
+                                        .WithParam("newAccount", newUser)
+                                        .WithParam("newStudent", newStudent)
+                                        .ExecuteWithoutResults();
+
+                            //work without error
+                            return RedirectToAction("Login", "Account");
+                        }
+                        catch (Neo4jClient.NeoException exception)
+                        {
+                            //THIS does not work  
+                            /*if (exception.Message.Contains("Username")) { ViewBag.Message = "User with such username already exists"; return View("Register"); }
+                            else if (exception.Message.Contains("StudentID")) { ViewBag.Message = "Student with such student ID number already exists"; return View("Register"); }
+                            else*/ throw exception;
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Student with such student ID number already exists";
+                        return View("Register");
+                    }
+                }
                 //Create new session
                 //Session["User"] = newUser;
-                return RedirectToAction("Login", "Account");
+                ViewBag.Message = "User with such username already exists";
+                return View("Register");
             }
 
             // model is not valid

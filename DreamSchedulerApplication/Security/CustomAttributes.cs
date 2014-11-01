@@ -2,11 +2,30 @@
 using System.Web.Mvc.Filters;
 using DreamSchedulerApplication;
 using System.Web.Security;
-using DreamSchedulerApplication.getCookieInfo;
 using System;
+using DreamSchedulerApplication.Security;
+
 
 namespace DreamSchedulerApplication.CustomAttributes
 {
+
+    /*
+     * Security Measures
+     * 
+     * Filter 
+     * 
+     * [adminOrMemberAuth] : only admin or member can access these controller or methods
+     * 
+     * [admin] : "..." only admin
+     * 
+     * [member] : "..." only member (the student user)
+     * 
+     * 
+     * if the user does not respect the filter it will redirect it to the login page and give a specific error message if necessary 
+     * 
+     * */
+
+
     public class AdminOrMemberAuthAttribute : ActionFilterAttribute, IAuthenticationFilter
     {
         public void OnAuthentication(AuthenticationContext filterContext)
@@ -15,15 +34,15 @@ namespace DreamSchedulerApplication.CustomAttributes
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
-            var test = new SecurityInformation();
-            string myname = test.CurrentUserName;
-            string myrole = test.CurrentUserRole;
+            var test = new PrivateData();
+            //
+            string myrole = test.GetUserRole();
 
 
 
             var user = filterContext.HttpContext.User;
 
-            if (user == null || myrole== null/*!user.Identity.IsAuthenticated*/) //null or not authenticated
+            if (user == null || myrole== null || !user.Identity.IsAuthenticated) 
             {
                 // filterContext.Result = new HttpUnauthorizedResult();
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
@@ -42,19 +61,19 @@ namespace DreamSchedulerApplication.CustomAttributes
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
-            var test = new SecurityInformation();
-            string myname = test.CurrentUserName;
-            string myrole = test.CurrentUserRole;
+            var test = new PrivateData();
+           
+            string myrole = test.GetUserRole();
 
 
-            var user = filterContext.HttpContext.User.Identity.Name;
+            var user = filterContext.HttpContext.User;
             
 
-            if (/*!user.Identity.IsAuthenticated*/ myrole == null || user == null)
+            if (!user.Identity.IsAuthenticated || myrole == null || user == null)
             {
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
             }
-            else if (/*user.Identity.IsAuthenticated && user.Identity.Name!= "Admin"*/ myrole != "Admin")
+            else if (user.Identity.IsAuthenticated && myrole != "Admin")
             {
                 //for testing
                 //bool trueorfalse = user.Identity.IsAuthenticated;
@@ -73,17 +92,17 @@ namespace DreamSchedulerApplication.CustomAttributes
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
-            var test = new SecurityInformation();
-            string myname = test.CurrentUserName;
-            string myrole = test.CurrentUserRole;
+            var test = new PrivateData();
+            string myrole = test.GetUserRole();
+           
 
 
             var user = filterContext.HttpContext.User;
             
-            if(/*!user.Identity.IsAuthenticated*/ myrole == null || user == null)
+            if(!user.Identity.IsAuthenticated || myrole == null || user == null)
             {
                 filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
-            } else if (/*user.Identity.IsAuthenticated &&user.Identity.Name*/ myrole != "Member")
+            } else if ( myrole != "Member")
             {
                 //for testing
                 //bool trueorfalse = user.Identity.IsAuthenticated;

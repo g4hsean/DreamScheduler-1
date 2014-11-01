@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Neo4jClient;
 using DreamSchedulerApplication.Models;
 using DreamSchedulerApplication.CustomAttributes;
+using DreamSchedulerApplication.Security;
+	
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -27,41 +30,66 @@ namespace DreamSchedulerApplication.Controllers
             var academicRecord = new AcademicRecord();
 
             client.Connect();//connect to database
-            var student = client.Cypher
-                         .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "123")//testing
-                         .Return((s) => s.As<Student>())
-                         .Results.FirstOrDefault();
 
-            academicRecord.Student = student;
+            string username = new PrivateData().GetUserName();
+
+
+            var student1 = client.Cypher
+                .Match("(u:User)-[]->(s:Student)")
+                .Where((User u) => u.Username == username)
+                .WithParam("username", username)
+                .Return((s) => s.As<Student>())
+                .Results.First();
+
+
+            academicRecord.Student = student1;
 
             return View(academicRecord);
         }
+        [AdminOrMemberAuth]
         public ActionResult AccountEdit()
         {
             var academicRecord = new AcademicRecord();
 
             client.Connect();//connect to database
-            var student = client.Cypher
-                         .Match("(s:Student)")
-                         .Where((Student s) => s.StudentID == "123")//testing
-                         .Return((s) => s.As<Student>())
-                         .Results.FirstOrDefault();
-            academicRecord.Student = student;
+
+            string username = new PrivateData().GetUserName();
+
+            var student1 = client.Cypher
+                .Match("(u:User)-[]->(s:Student)")
+                .Where((User u) => u.Username == username)
+                .WithParam("username", username)
+                .Return((s) => s.As<Student>())
+                .Results.First();
+
+            academicRecord.Student = student1;
 
             return View(academicRecord);
         }
+        [AdminOrMemberAuth]
         [HttpPost]
         public ActionResult AccountEdit(AcademicRecord model)
         {
-            //BUG HERE
+
             var teststudent = new Student { FirstName = model.Student.FirstName, LastName = model.Student.LastName, StudentID = model.Student.StudentID, GPA = model.Student.GPA };
             
             
             client.Connect();//connect database
+
+            string username = new PrivateData().GetUserName();
+
+            //find the student node matched to that account
+            var student1 = client.Cypher
+               .Match("(u:User)-[]->(s:Student)")
+               .Where((User u) => u.Username == username)
+               .WithParam("username", username)
+               .Return((s) => s.As<Student>())
+               .Results.First();
+
+            //update student node information
             client.Cypher
                 .Match("(s:Student)")
-                .Where((Student s) => s.StudentID == "123") //it was supposed to be model.Student.StudentID  but it couldn't find because all my value are null from POST... weird  When i used the Id, it replace all the value in database with null(empty)... so i know that query work lol but something is wrong with my HTML POST submit
+                .Where((Student s) => s.StudentID == student1.StudentID) 
                 .Set("s = {student}")
                 .WithParam("student", new Student { StudentID = teststudent.StudentID, FirstName = teststudent.FirstName, LastName = teststudent.LastName, GPA = teststudent.GPA })
                 .ExecuteWithoutResults();
