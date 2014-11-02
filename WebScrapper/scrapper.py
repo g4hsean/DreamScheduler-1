@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import re
+import pprint
+import json
+
 def convertTimeFormat(dateTime):
     dateConverter = {'M' : 'Monday', 'T' : 'Tuesday', 'W': 'Wednesday', 'J' : 'Thursday', 'F': 'Friday', 'S' : 'Saturday', 'D' : 'Sunday'} # used to convert M--J--- to a list of Monday, Thursday
     convertedTimes = {'Days' : [], 'Start-Time' : '', 'End-Time' : ''}
@@ -158,5 +161,6 @@ def getFallWinter():
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass] = []
                     courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
                 currentEntry += 1
-    print courseInformationMasterList
+    with open('JSONdata.txt', 'w') as outfile:
+      json.dump(courseInformationMasterList, outfile)
 getFallWinter()
