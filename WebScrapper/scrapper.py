@@ -3,7 +3,21 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import re
+def convertTimeFormat(dateTime):
+    dateConverter = {'M' : 'Monday', 'T' : 'Tuesday', 'W': 'Wednesday', 'J' : 'Thursday', 'F': 'Friday', 'S' : 'Saturday', 'D' : 'Sunday'} # used to convert M--J--- to a list of Monday, Thursday
+    convertedTimes = {'Days' : [], 'Start-Time' : '', 'End-Time' : ''}
+    
+    timeObject = dateTime.strip().split(" ")
+    for day in timeObject[0]:
+        if day in dateConverter.keys():
+            convertedTimes['Days'].append(dateConverter[day])
 
+    extractedTime = timeObject[1].replace('(','').replace(')','').split('-')
+    convertedTimes['Start-Time'] = extractedTime[0]
+    convertedTimes['End-Time'] = extractedTime[1]
+
+    return convertedTimes
+    
 def getSeptEntry():
     page = requests.get('http://www.concordia.ca/encs/computer-science-software-engineering/students/course-sequences/sept-soen-general.html')
     response = page.text
@@ -102,15 +116,16 @@ def getFallWinter():
                 else:
                     courseTime = course[currentEntry].findAll('font')
                     try:
-                        courseSection = courseTime[0].text
-                        typeOfClass = courseTime[1].text
-                        date = courseTime[2].text
-                        buildingLocation = courseTime[3].text
-                        professor = courseTime[4].text
+                        courseSection = courseTime[0].text.strip()
+                        typeOfClass = courseTime[1].text.strip()
+                        date = convertTimeFormat(courseTime[2].text)
+                        locationInfo = courseTime[3].text.strip().split(" ")
+                        buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}  
+                        professor = courseTime[4].text.strip()
                     except:
                         currentEntry += 1
                         continue
-                    
+
                     if 'Lect' in typeOfClass:
                         courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
                     elif 'Tut' in typeOfClass:
@@ -148,15 +163,16 @@ def getFallWinter():
                 else:
                     courseTime = course[currentEntry].findAll('font')
                     try:
-                        courseSection = courseTime[0].text
-                        typeOfClass = courseTime[1].text
-                        date = courseTime[2].text
-                        buildingLocation = courseTime[3].text
-                        professor = courseTime[4].text
+                        courseSection = courseTime[0].text.strip()
+                        typeOfClass = courseTime[1].text.strip()
+                        date = convertTimeFormat(courseTime[2].text)
+                        locationInfo = courseTime[3].text.strip().split(" ")
+                        buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}
+                        professor = courseTime[4].text.strip()
                     except:
                         currentEntry += 1
                         continue
-                    
+
                     if 'Lect' in typeOfClass:
                         courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
                     elif 'Tut' in typeOfClass:
@@ -188,15 +204,16 @@ def getFallWinter():
             else:
                 courseTime = course[currentEntry].findAll('font')
                 try:
-                    courseSection = courseTime[0].text
-                    typeOfClass = courseTime[1].text
-                    date = courseTime[2].text
-                    buildingLocation = courseTime[3].text
-                    professor = courseTime[4].text
+                    courseSection = courseTime[0].text.strip()
+                    typeOfClass = courseTime[1].text.strip()
+                    date = convertTimeFormat(courseTime[2].text)
+                    locationInfo = courseTime[3].text.strip().split()
+                    buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}
+                    professor = courseTime[4].text.strip()
                 except:
                     currentEntry += 1
                     continue
-                    
+    
                 if 'Lect' in typeOfClass:
                     courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
                 elif 'Tut' in typeOfClass:
