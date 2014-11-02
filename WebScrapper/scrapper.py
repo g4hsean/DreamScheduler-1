@@ -89,105 +89,30 @@ def getFallWinter():
         courseID = courseHeader[0].text
         courseDescription = courseHeader[1].text
         courseCreditAmount = courseHeader[2].text.replace(" credits","")
-        courseInformationMasterList[courseID] = [courseDescription,courseCreditAmount,[],[],{}]
-        
-        if 'Prerequisite' in str(course[1]):
+        courseInformationMasterList[courseID] = {'Course Description': courseDescription,'Credits' : courseCreditAmount,'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {}}
+        currentCourseLocation = 1
+
+        if 'Prerequisite' in str(course[currentCourseLocation]):
             prerequisitesList = prerequisitePattern.findall(str(course[1]))
-            courseInformationMasterList[courseID][2] = prerequisitesList
-        elif 'Special Note' in str(course[1]): # This is not necessary but in case in the future a speacial note is added before Prerequisite text
+            courseInformationMasterList[courseID]['Prerequisites'] = prerequisitesList
+            currentCourseLocation += 1
+        elif 'Special Note' in str(course[currentCourseLocation]): # This is not necessary but in case in the future a speacial note is added before Prerequisite text
             restrictionList = prerequisitePattern.findall(str(course[1]))
-            courseInformationMasterList[courseID][3] = restrictionList
-        else:
-            courseSeason = course[1].findAll('b')[0].text
-            courseInformationMasterList[courseID][4][courseSeason] = {}
-            currentEntry = 2 #We already parsed course[1] it was the season heading thats why we start at 2
-            seasonToCheckFor = ['Fall','Winter']
-            while currentEntry < len(course):
-                #A cheaters way to identify the season. It causes issues when parsing entries that do not have the bold tag <b> which returns an empty list when we search for the tag.
-                try:
-                    entry = course[currentEntry].findAll('b')[0].text
-                except:
-                    entry = ""
-
-                if any(season in entry for season in seasonToCheckFor):
-                    courseSeason = course[currentEntry].findAll('b')[0].text
-                    courseInformationMasterList[courseID][4][courseSeason] = {}
-                    currentEntry += 1
-                else:
-                    courseTime = course[currentEntry].findAll('font')
-                    try:
-                        courseSection = courseTime[0].text.strip()
-                        typeOfClass = courseTime[1].text.strip()
-                        date = convertTimeFormat(courseTime[2].text)
-                        locationInfo = courseTime[3].text.strip().split(" ")
-                        buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}  
-                        professor = courseTime[4].text.strip()
-                    except:
-                        currentEntry += 1
-                        continue
-
-                    if 'Lect' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
-                    elif 'Tut' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Tutorial'] = [courseSection,date,buildingLocation]
-                    elif 'Lab' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Lab'] = [courseSection,date,buildingLocation]
-                    else:
-                        courseInformationMasterList[courseID][4][courseSeason][typeOfClass] = [courseSection,date,buildingLocation,professor]
-                    currentEntry += 1
-            continue
-
-        if 'Special Note' in str(course[2]):
+            courseInformationMasterList[courseID]['Restrictions'] = restrictionList
+            currentCourseLocation += 1
+        
+        if 'Special Note' in str(course[currentCourseLocation]):
             restrictionList = prerequisitePattern.findall(str(course[2]))
-            courseInformationMasterList[courseID][3] = restrictionList
-        elif 'Prerequisite' in str(course[2]): # This is not necessary but in case in the future a Prerequisite is added before special note text
+            courseInformationMasterList[courseID]['Restrictions'] = restrictionList
+            currentCourseLocation += 1
+        elif 'Prerequisite' in str(course[currentCourseLocation]): # This is not necessary but in case in the future a Prerequisite is added before special note text
             prerequisitesList = prerequisitePattern.findall(str(course[2]))
-            courseInformationMasterList[courseID][2] = prerequisitesList
-        else:
-            courseSeason = course[2].findAll('b')[0].text
-            courseInformationMasterList[courseID][4][courseSeason] = {}
-            currentEntry = 2 #We already parsed course[1] it was the season heading thats why we start at 2
-            seasonToCheckFor = ['Fall','Winter']
-            while currentEntry < len(course):
-
-                #A cheaters way to identify the season. It causes issues when parsing entries that do not have the bold tag <b> which returns an empty list when we search for the tag.
-                try:
-                    entry = course[currentEntry].findAll('b')[0].text
-                except:
-                    entry = ""
-
-                if any(season in entry for season in seasonToCheckFor):
-                    courseSeason = course[currentEntry].findAll('b')[0].text
-                    courseInformationMasterList[courseID][4][courseSeason] = {}
-                    currentEntry += 1
-                else:
-                    courseTime = course[currentEntry].findAll('font')
-                    try:
-                        courseSection = courseTime[0].text.strip()
-                        typeOfClass = courseTime[1].text.strip()
-                        date = convertTimeFormat(courseTime[2].text)
-                        locationInfo = courseTime[3].text.strip().split(" ")
-                        buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}
-                        professor = courseTime[4].text.strip()
-                    except:
-                        currentEntry += 1
-                        continue
-
-                    if 'Lect' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
-                    elif 'Tut' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Tutorial'] = [courseSection,date,buildingLocation]
-                    elif 'Lab' in typeOfClass:
-                        courseInformationMasterList[courseID][4][courseSeason]['Lab'] = [courseSection,date,buildingLocation]
-                    else:
-                        courseInformationMasterList[courseID][4][courseSeason][typeOfClass] = [courseSection,date,buildingLocation,professor]
-                    currentEntry += 1
-            continue
-            
-
-        courseSeason = course[3].findAll('b')[0].text
-        courseInformationMasterList[courseID][4][courseSeason] = {}
-        currentEntry = 2 #We already parsed course[1] it was the season heading thats why we start at 2
+            courseInformationMasterList[courseID]['Prerequisites'] = prerequisitesList
+            currentCourseLocation += 1
+                   
+        courseSeason = course[currentCourseLocation].findAll('b')[0].text
+        courseInformationMasterList[courseID]['Course Dates'][courseSeason] = {}
+        currentEntry = currentCourseLocation + 1 #We already parsed course[1] it was the season heading thats why we start at 2
         seasonToCheckFor = ['Fall','Winter']
         while currentEntry < len(course):
 
@@ -199,29 +124,39 @@ def getFallWinter():
                 
             if any(season in entry for season in seasonToCheckFor):
                 courseSeason = course[currentEntry].findAll('b')[0].text
-                courseInformationMasterList[courseID][4][courseSeason] = {}
+                courseInformationMasterList[courseID]['Course Dates'][courseSeason] = {}
                 currentEntry += 1
             else:
                 courseTime = course[currentEntry].findAll('font')
-                try:
-                    courseSection = courseTime[0].text.strip()
-                    typeOfClass = courseTime[1].text.strip()
-                    date = convertTimeFormat(courseTime[2].text)
-                    locationInfo = courseTime[3].text.strip().split()
-                    buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}
-                    professor = courseTime[4].text.strip()
-                except:
+                if len(courseTime) < 4:
                     currentEntry += 1
                     continue
+
+                courseSection = courseTime[0].text.strip()
+                typeOfClass = courseTime[1].text.strip()
+                date = convertTimeFormat(courseTime[2].text)
+                locationInfo = courseTime[3].text.strip().split(" ")
+                if len(locationInfo) == 1:
+                    locationInfo = [locationInfo[0], '']
+                buildingLocation = {"Building" : locationInfo[0], "Room" : locationInfo[1]}
+                professor = courseTime[4].text.strip()
     
                 if 'Lect' in typeOfClass:
-                    courseInformationMasterList[courseID][4][courseSeason]['Lecture'] = [courseSection,date,buildingLocation,professor]
+                    if 'Lecture' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
+                        courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lecture'] = []
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lecture'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
                 elif 'Tut' in typeOfClass:
-                    courseInformationMasterList[courseID][4][courseSeason]['Tutorial'] = [courseSection,date,buildingLocation]
+                    if 'Tutorial' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
+                        courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Tutorial'] = []
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Tutorial'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation})
                 elif 'Lab' in typeOfClass:
-                    courseInformationMasterList[courseID][4][courseSeason]['Lab'] = [courseSection,date,buildingLocation]
+                    if 'Lab' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
+                        courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lab'] = []
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lab'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation})
                 else:
-                    courseInformationMasterList[courseID][4][courseSeason][typeOfClass] = [courseSection,date,buildingLocation,professor]
+                    if typeOfClass not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
+                        courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass] = []
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
                 currentEntry += 1
     print courseInformationMasterList
 getFallWinter()
