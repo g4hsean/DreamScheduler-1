@@ -1,0 +1,55 @@
+﻿﻿@using DreamSchedulerApplication.Security;
+@{
+    //use so that 
+    string LogoHome = string.Empty;
+    if(HttpContext.Current.User.IsInRole("student"))
+    {
+        LogoHome = "Student";
+    }
+    else if (HttpContext.Current.User.IsInRole("admin"))
+    {
+        LogoHome = "Admin";
+    }
+}
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("DreamScheduler", "Index", LogoHome, new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse">
+            <!--if else statement : if user show user nav tab, if admin show different nav tab-->
+            @{
+                if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    
+                {
+                    if (HttpContext.Current.User.IsInRole("admin"))
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+                            <li>@Html.ActionLink("Database", "Database", "Admin")</li>
+                        </ul>
+                    }
+                    else if(HttpContext.Current.User.IsInRole("student"))
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Student")</li>
+                            <li>@Html.ActionLink("Sequence", "CourseSequence", "Student")</li>
+                            <li>@Html.ActionLink("AcademicRecord", "Index", "AcademicRecord")</li>
+                        </ul>
+                    }
+                }
+            }
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav navbar-nav navbar-right">
+                    @Html.Partial("_LoginPartial")
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,12 +1,7 @@
 ﻿@model DreamSchedulerApplication.Models.AcademicRecord
-@using DreamSchedulerApplication.Security;
 @{
     ViewBag.Title = "Account";
 
-    var auth = new PrivateData();
-    string role = auth.GetUserRole();
-    
-    
 }
 
 <h2>Account Page</h2>
@@ -31,12 +26,12 @@
         </div>
     </div>
 
-    @{if (role == "Admin")
+    @{if(HttpContext.Current.User.IsInRole("admin"))
     {
         // no id and gpa
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+                <a href="@Url.Action("AccountEdit", "Manage")" class=" btn btn-primary">Edit</a>
             </div>
         </div>
     }
@@ -56,7 +51,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <a href="@Url.Action("AccountEdit", "Home")" class=" btn btn-primary">Edit</a>
+                <a href="@Url.Action("AccountEdit", "Manage")" class=" btn btn-primary">Edit</a>
             </div>
         </div>
     }

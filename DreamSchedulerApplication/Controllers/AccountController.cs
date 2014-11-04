@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using DreamSchedulerApplication.Models;
 using DreamSchedulerApplication.Libraries;
-using DreamSchedulerApplication.CustomAttributes;
 using System.Web.Security;
 using System.Security.Principal;
 using DreamSchedulerApplication.Security;
@@ -15,7 +14,12 @@ namespace DreamSchedulerApplication.Controllers
     public class AccountController : Controller
     {
 
-        private GraphClient client = new GraphClient(new Uri("http://localhost:7474/db/data"));
+        private readonly IGraphClient client;
+
+        public AccountController(IGraphClient graphClient)
+        {
+            client = graphClient;
+        }
         
 
         //
@@ -40,7 +44,6 @@ namespace DreamSchedulerApplication.Controllers
                 {
                     //Find user account
                     //If not found, neo4j will throw an exception 
-                    client.Connect();//connect to database
                     user = client
                                   .Cypher
                                   .Match("(n:User)")
@@ -50,29 +53,21 @@ namespace DreamSchedulerApplication.Controllers
                 }
                 catch (InvalidOperationException)
                 {
-                    //If account not found, display invalid user account error 
-                    ViewBag.Message = "A user with this username does not exist";
+                    //If account not found, display invalid user account error
+                    ModelState.AddModelError("", "A user with this username does not exist");
                     return View("login");
                 }
 
                 if (PasswordHash.ValidatePassword(model.Password, user.Password))
                 {
-                    //if user is logged in, create session
-                    Session["User"] = user.Username;
-
-                    //if user is admin send him to admin controllwe
-                    if (user.Role == "Admin")
-                    {
-                        FormsAuthentication.SetAuthCookie(user.Username, false);
-                        return RedirectToAction("Index", "Admin");
-                    }
-                    //else send him to member controller
+                    //if user is logged in, create an encrypted cookie
                     FormsAuthentication.SetAuthCookie(user.Username, false);
-                    return RedirectToAction("Index", "Member");// index, student
+                    if (user.Roles.Contains("admin")) return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Student");
                 }
                 else
                 {
-                    ViewBag.Message = "Wrong password, please try again";
+                    ModelState.AddModelError("", "The user name or password provided is incorrect");
                     return View("login");
                 }
             }
@@ -97,50 +92,29 @@ namespace DreamSchedulerApplication.Controllers
             if (ModelState.IsValid)
             {
                 var encryptedPassword = PasswordHash.CreateHash(model.Password);
-                var newUser = new User { Username = model.Username, Password = encryptedPassword, Role ="Member"}; //for admin, need to manually add a script command
-                //MATCH (u:User {Username:'michel'}) SET u.Role = 'Admin'     
-                // this will change user role from Member to Admin 
+                var newUser = new User { Username = model.Username, Password = encryptedPassword, Roles = "student" };
 
                 var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, GPA = model.GPA };
 
-                var user = new PrivateData();
-
-                //Protection again multiple account with same id/username
-                if (user.UserUnique(model.Username)) //user is unique
+                // create the account in the database
+                try
                 {
-                    if(user.IdUnique(model.StudentID))//id is unique
-                    {
-                        // create the account in the database
-                        try
-                        {
-                            client.Connect();//connect to database
-                            client.Cypher
-                                        .Create("(u:User {newAccount})-[:IsA]->(s:Student {newStudent})")
-                                        .WithParam("newAccount", newUser)
-                                        .WithParam("newStudent", newStudent)
-                                        .ExecuteWithoutResults();
-
-                            //work without error
-                            return RedirectToAction("Login", "Account");
-                        }
-                        catch (Neo4jClient.NeoException exception)
-                        {
-                            //THIS does not work  
-                            /*if (exception.Message.Contains("Username")) { ViewBag.Message = "User with such username already exists"; return View("Register"); }
-                            else if (exception.Message.Contains("StudentID")) { ViewBag.Message = "Student with such student ID number already exists"; return View("Register"); }
-                            else*/ throw exception;
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Student with such student ID number already exists";
-                        return View("Register");
-                    }
+                    client.Cypher
+                                .Create("(u:User {newAccount})-[:IsA]->(s:Student {newStudent})")
+                                .WithParam("newAccount", newUser)
+                                .WithParam("newStudent", newStudent)
+                                .ExecuteWithoutResults();
                 }
+                catch (Neo4jClient.NeoException exception)
+                {
+                    if (exception.Message.Contains("Username")) { ModelState.AddModelError("", "User with such username already exists"); return View("Register"); }
+                    else if (exception.Message.Contains("StudentID")) { ModelState.AddModelError("", "Student with such student ID number already exists"); return View("Register"); }
+                    else throw exception;
+                }
+
                 //Create new session
-                //Session["User"] = newUser;
-                ViewBag.Message = "User with such username already exists";
-                return View("Register");
+                FormsAuthentication.SetAuthCookie(newUser.Username, false);
+                return RedirectToAction("Index", "Student");
             }
 
             // model is not valid
@@ -150,13 +124,13 @@ namespace DreamSchedulerApplication.Controllers
 
         //
         // POST: /Account/LogOff
-       
-        //[ValidateAntiForgeryToken]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            Session.Clear();
+            //Session.Clear();
             FormsAuthentication.SignOut();
-            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+            //HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return RedirectToAction("Index", "Home");
         }
 

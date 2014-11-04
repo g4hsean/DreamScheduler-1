@@ -43,6 +43,19 @@
     <Reference Include="Neo4jClient">
       <HintPath>..\packages\Neo4jClient.1.0.0.658\lib\net40\Neo4jClient.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\packages\Ninject.MVC3.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -102,6 +115,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -112,18 +128,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Modules\Neo4jModule.cs" />
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AcademicRecordController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Libraries\PasswordHash.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -131,10 +146,8 @@
     <Compile Include="Models\AcademicRecord.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CourseSequence.cs" />
-    <Compile Include="Models\Database.cs" />
-    <Compile Include="Models\LoginTest.cs" />
+    <Compile Include="Models\DatabaseModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\CustomAttributes.cs" />
     <Compile Include="Security\PrivateData.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -180,18 +193,23 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\LOGINDESIGNtabifneeded.cshtml" />
-    <Content Include="Views\Home\Account.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Member\AcademicRecord.cshtml" />
-    <Content Include="Views\Member\CourseSequence.cshtml" />
-    <Content Include="Views\Member\Index.cshtml" />
+    <Content Include="Views\Student\AcademicRecord.cshtml" />
+    <Content Include="Views\Student\CourseSequence.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Member\Courses.cshtml" />
-    <Content Include="Views\Member\Professors.cshtml" />
+    <Content Include="Views\Student\Courses.cshtml" />
+    <Content Include="Views\Student\Professors.cshtml" />
     <Content Include="Views\Admin\Database.cshtml" />
-    <Content Include="Views\Home\AccountEdit.cshtml" />
+    <Content Include="Views\Manage\AccountEdit.cshtml" />
+    <Content Include="Views\AcademicRecord\Index.cshtml" />
+    <Content Include="Views\AcademicRecord\CreateCourseEntry.cshtml" />
+    <Content Include="Views\AcademicRecord\EditCourseEntry.cshtml" />
+    <Content Include="Views\AcademicRecord\DeleteCourseEntry.cshtml" />
+    <Content Include="Views\Shared\_NavbarPartial.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

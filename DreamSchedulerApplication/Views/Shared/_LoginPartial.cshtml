@@ -1,0 +1,43 @@
+﻿<!-- check if user is logged in, if no link to login, else show username and dropdown list-->
+@{
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        <li>
+            <a href="@Url.Action("Register", "Account")"><b>Register</b></a>
+        </li>
+        <li>
+            <a href="@Url.Action("Login", "Account")"><b>Login</b></a>
+        </li>
+
+    }
+    else
+    {
+
+        //user is logged in, output username
+        ViewBag.SessionUser = HttpContext.Current.User.Identity.Name;
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+            <b>
+                @ViewBag.SessionUser
+            </b><b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu text-center">
+            <li><a href="@Url.Action("Index", "Manage")">Manage Account</a></li>
+            <li><a href="#">action</a></li>
+            <li class="divider"></li>
+            <li class="text-center">
+                ﻿@if (Request.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="submit" class="btn btn-primary" value="Log Out">
+                        <p></p>
+
+                    }
+                }
+            </li>
+        </ul>
+
+    }
+}
