@@ -158,6 +158,34 @@
     <Content Include="Content\images\icons\book14.png" />
     <Content Include="Content\images\icons\calendar5.png" />
     <Content Include="Content\images\icons\curriculum.png" />
+    <Content Include="Content\images\professorProfile\Adam Krzyzak.jpg" />
+    <Content Include="Content\images\professorProfile\Bipin C. Desai.jpg" />
+    <Content Include="Content\images\professorProfile\Brigitte Jaumard.jpg" />
+    <Content Include="Content\images\professorProfile\Ching Yee Suen.jpg" />
+    <Content Include="Content\images\professorProfile\Eusebius J. Doedel.jpg" />
+    <Content Include="Content\images\professorProfile\Gosta Graphne.jpg" />
+    <Content Include="Content\images\professorProfile\Gregory Butler.jpg" />
+    <Content Include="Content\images\professorProfile\Hovhannes Harutyunyan.jpg" />
+    <Content Include="Content\images\professorProfile\Joey Paquet.jpg" />
+    <Content Include="Content\images\professorProfile\Juergen Rilling.png" />
+    <Content Include="Content\images\professorProfile\Lata Narayanan.jpg" />
+    <Content Include="Content\images\professorProfile\Leila Kosseim.jpg" />
+    <Content Include="Content\images\professorProfile\Nancy Acemian.jpg" />
+    <Content Include="Content\images\professorProfile\Nematollaah Shiri.jpg" />
+    <Content Include="Content\images\professorProfile\Nikolaos Tsantalis.jpg" />
+    <Content Include="Content\images\professorProfile\Olga Ormandjieva.jpg" />
+    <Content Include="Content\images\professorProfile\Peter Grogono.jpg" />
+    <Content Include="Content\images\professorProfile\Peter Rigby.jpg" />
+    <Content Include="Content\images\professorProfile\Rajagopalan Jayakumar.jpg" />
+    <Content Include="Content\images\professorProfile\Stan Klasa.jpg" />
+    <Content Include="Content\images\professorProfile\Sudhir Mudur.jpg" />
+    <Content Include="Content\images\professorProfile\Terry Fancott.jpg" />
+    <Content Include="Content\images\professorProfile\Thomas G. Fevens.jpg" />
+    <Content Include="Content\images\professorProfile\Tiberiu Popa.png" />
+    <Content Include="Content\images\professorProfile\Tien D. Bui.jpg" />
+    <Content Include="Content\images\professorProfile\Todd Eavis.jpg" />
+    <Content Include="Content\images\professorProfile\Volker Haarslev.jpg" />
+    <Content Include="Content\images\professorProfile\Yuhong Yan.jpg" />
     <Content Include="Content\images\sequencelogo.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -210,6 +238,7 @@
     <Content Include="Views\AcademicRecord\DeleteCourseEntry.cshtml" />
     <Content Include="Views\Shared\_NavbarPartial.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Admin\JsonProfessors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -224,6 +253,15 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'working|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

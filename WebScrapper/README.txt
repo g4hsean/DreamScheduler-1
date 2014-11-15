@@ -14,3 +14,7 @@ to run the script (in command prompt):
 python scrapper.py
 
 you can also run it from Python IDLE by opening the file in IDLE then pressing F5 key. 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+Put file professors.json in your python folder C:/Python27/professors.json

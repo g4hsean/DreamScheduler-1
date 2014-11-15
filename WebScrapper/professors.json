@@ -1,0 +1,317 @@
+{
+  "Professor1": {
+    "Name": "Nancy Acemian",
+    "Description": "Senior Lecturer, Computer Science and Software Engineering First Year Program Coordinator, Lecturer, Centre for Engineering in Society",
+    "Office": "S-EV 3153 ",
+    "Phone": "(514) 848-2424 ext. 7830",
+    "Email": "nancy.acemian@concordia.ca",
+    "Website": null,
+    "Image": "~/Content/images/professorProfile/NancyAcemian.jpg"
+  },
+  "Professor2": {
+    "Name": "Sabine Berler",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3283 ",
+    "Phone": "(514) 848-2424 ext. 3003",
+    "Email": "bergler@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~bergler/",
+    "Image": null
+  },
+  "Professor3": {
+    "Name": "Tien D. Bui",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3167 ",
+    "Phone": "(514) 848-2424 ext. 3014",
+    "Email": "tien.bui@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~bui/",
+    "Image": "~/Content/images/professorProfile/TienD.Bui.jpg"
+  },
+  "Professor5": {
+    "Name": "Gregory Butler",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3219",
+    "Phone": "(514) 848-2424 ext. 3031",
+    "Email": "gregory.butler@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~gregb/",
+    "Image": "~/Content/images/professorProfile/GregoryButler.jpg"
+  },
+  "Professor6": {
+    "Name": "Vaclav (Vasek) Chvatal",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3107",
+    "Phone": "(514) 848-2424 ext. 5767",
+    "Email": "vasek.chvatal@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~chvatal/",
+    "Image": null
+  },
+  "Professor7": {
+    "Name": "Constantinos Constantinides",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3229",
+    "Phone": "(514) 848-2424 ext. 5374",
+    "Email": "constantinos.constantinides@concordia.ca",
+    "Website": null,
+    "Image": null
+  },
+  "Professor8": {
+    "Name": "Bipin C. Desai",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3121",
+    "Phone": "(514) 848-2424 ext. 3025",
+    "Email": "bipinc.desai@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~bcdesai/",
+    "Image": "~/Content/images/professorProfile/BipinDesai.jpg"
+  },
+  "Professor9": {
+    "Name": "Eusebius J. Doedel",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3285",
+    "Phone": "(514) 848-2424 ext. 3048",
+    "Email": "doedel@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~doedel/",
+    "Image": "~/Content/images/professorProfile/EuseBiusJDoedel.jpg"
+  },
+  "Professor10": {
+    "Name": "Todd Eavis",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3409",
+    "Phone": "(514) 848-2424 ext. 5372",
+    "Email": "todd.eavis@concordia.ca",
+    "Website": "http://tangerine.cs.concordia.ca/",
+    "Image": "~/Content/images/professorProfile/ToddEavis.jpg"
+  },
+  "Professor11": {
+    "Name": "Todd Eavis",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3409",
+    "Phone": "(514) 848-2424 ext. 5372",
+    "Email": "todd.eavis@concordia.ca",
+    "Website": "http://tangerine.cs.concordia.ca/",
+    "Image": "~/Content/images/professorProfile/ToddEavis.jpg"
+  },
+  "Professor12": {
+    "Name": "Thomas G. Fevens",
+    "Description": "Associate Chair/  Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3157",
+    "Phone": "(514) 848-2424 ext. 3038",
+    "Email": "fevens@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~fevens/",
+    "Image": "~/Content/images/professorProfile/ThomasGFevens.jpg"
+  },
+  "Professor13": {
+    "Name": "Dhrubajyoti Goswami",
+    "Description": "Associate Professor , Computer Science and Software Engineering",
+    "Office": "S-EV 3145",
+    "Phone": "(514) 848-2424 ext. 7882",
+    "Email": "dhrubajyoti.goswami@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~goswami/",
+    "Image": null
+  },
+  "Professor14": {
+    "Name": "Gösta Grahne",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3109",
+    "Phone": "(514) 848-2424 ext. 3027",
+    "Email": "gosta.grahne@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~grahne/",
+    "Image": "~/Content/images/professorProfile/GostaGraphne.jpg"
+  },
+  "Professor15": {
+    "Name": "Volker Haarslev",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3119",
+    "Phone": "(514) 848-2424 ext. 3049",
+    "Email": "haarslev@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~haarslev/",
+    "Image": "~/Content/images/professorProfile/VolkerHaarslev.jpg"
+  },
+  "Professor16": {
+    "Name": "Aiman Hanna",
+    "Description": "Senior Lecturer, Computer Science and Software Engineering",
+    "Office": "S-EV 3257",
+    "Phone": "(514) 848-2424 ext. 7878",
+    "Email": "ahanna@cs.concordia.ca",
+    "Website": "http://www.aimanhanna.com/",
+    "Image": null
+  },
+  "Professor17": {
+    "Name": "Hovhannes Harutyunyan",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3155",
+    "Phone": "(514) 848-2424 ext. 7804",
+    "Email": "haruty@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~haruty/",
+    "Image": "~/Content/images/professorProfile/HovhannesHarutyunyan.jpg"
+  },
+  "Professor18": {
+    "Name": "Brigitte Jaumard",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3115",
+    "Phone": "(514) 848-2424 ext. 5380",
+    "Email": "bjaumard@cse.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~bjaumard/",
+    "Image": "~/Content/images/professorProfile/BrigitteJaumard.jpg"
+  },
+  "Professor19": {
+    "Name": "Rajagopalan Jayakumar",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3151",
+    "Phone": "(514) 848-2424 ext. 3011",
+    "Email": "jayakumar@cse.concordia.ca",
+    "Website": null,
+    "Image": "~/Content/images/professorProfile/RajagopalanJayakumar.jpg"
+  },
+  "Professor20": {
+    "Name": "Stan Klasa",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3114",
+    "Phone": "(514) 848-2424 ext. 3026",
+    "Email": "klasa@cs.concordia.ca",
+    "Website": null,
+    "Image": "~/Content/images/professorProfile/StanKlasa.jpg"
+  },
+  "Professor21": {
+    "Name": "Leila Kosseim",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3117",
+    "Phone": "(514) 848-2424 ext. 3074",
+    "Email": "leila.kosseim@concordia.ca",
+    "Website": "https://users.encs.concordia.ca/~kosseim/",
+    "Image": "~/Content/images/professorProfile/LeilaKosseim.jpg"
+  },
+  "Professor22": {
+    "Name": "Adam Krzyzak",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3279",
+    "Phone": "(514) 848-2424 ext. 3007",
+    "Email": "krzyzak@cs.concordia.ca",
+    "Website": null,
+    "Image": "~/Content/images/professorProfile/AdamKrzyzak.jpg"
+  },
+  "Professor23": {
+    "Name": "Sudhir Mudur",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3118",
+    "Phone": "(514) 848-2424 ext. 7818",
+    "Email": "sudhir.mudur@concordia.ca",
+    "Website": null,
+    "Image": "~/Content/images/professorProfile/SudhirMudur.jpg"
+  },
+  "Professor24": {
+    "Name": "Lata Narayanan",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3163",
+    "Phone": "(514) 848-2424 ext. 3029",
+    "Email": "lata@cs.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~lata/",
+    "Image": "~/Content/images/professorProfile/LataNarayanan.jpg"
+  },
+  "Professor25": {
+    "Name": "Olga Ormandjieva",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3165",
+    "Phone": "(514) 848-2424 ext. 7810",
+    "Email": "olga.ormandjieva@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~ormandj/",
+    "Image": "~/Content/images/professorProfile/OlgaOrmandjieva.jpg"
+  },
+  "Professor26": {
+    "Name": "Joey Paquet",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3221",
+    "Phone": "(514) 848-2424 ext. 7831",
+    "Email": "paquet@cse.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~paquet/",
+    "Image": "~/Content/images/professorProfile/JoeyPaquet.jpg"
+  },
+  "Professor27": {
+    "Name": "Tiberiu Popa",
+    "Description": "Assistant Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3127",
+    "Phone": "(514) 848-2424 ext. 4057",
+    "Email": "tiberiu.popa@concordia.ca",
+    "Website": "https://users.encs.concordia.ca/~stpopa/",
+    "Image": "~/Content/images/professorProfile/TiberiuPopa.jpg"
+  },
+  "Professor28": {
+    "Name": "David K. Probst",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3149",
+    "Phone": "(514) 848-2424 ext. 3023",
+    "Email": "probst@cse.concordia.ca",
+    "Website": null,
+    "Image": null
+  },
+  "Professor29": {
+    "Name": "Peter Rigby",
+    "Description": "Assistant Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3189",
+    "Phone": "(514) 848-2424 ext. 3167",
+    "Email": "peter.rigby@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~pcr/",
+    "Image": "~/Content/images/professorProfile/PeterRigby.jpg"
+  },
+  "Professor30": {
+    "Name": "Juergen Rilling",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3211",
+    "Phone": "(514) 848-2424 ext. 3016",
+    "Email": "juergen.rilling@concordia.ca",
+    "Website": "https://sites.google.com/site/juergenrilling/",
+    "Image": "~/Content/images/professorProfile/JuergenRilling.jpg"
+  },
+  "Professor31": {
+    "Name": "Nematollaah Shiri",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3411",
+    "Phone": "(514) 848-2424 ext. 3018",
+    "Email": "nemat.shiri@concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~shiri/",
+    "Image": "~/Content/images/professorProfile/NematollaahShiri.jpg"
+  },
+  "Professor32": {
+    "Name": "Ching Yee Suen",
+    "Description": "Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3105",
+    "Phone": "(514) 848-2424 ext. 3006",
+    "Email": "suen@cs.concordia.ca",
+    "Website": "http://explore.concordia.ca/ching-yee-suen",
+    "Image": "~/Content/images/professorProfile/ChinngYeeSuen.jpg"
+  },
+  "Professor33": {
+    "Name": "Nikolaos Tsantalis",
+    "Description": "Assistant Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3187",
+    "Phone": "(514) 848-2424 ext. 3020",
+    "Email": "tsantalis@cse.concordia.ca",
+    "Website": "http://users.encs.concordia.ca/~nikolaos/",
+    "Image": "~/Content/images/professorProfile/NikolaosTsantalis.jpg"
+  },
+  "Professor34": {
+    "Name": "René Witte",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3255",
+    "Phone": "(514) 848-2424 ext. 8942",
+    "Email": "rwitte@cse.concordia.ca",
+    "Website": "http://rene-witte.net/",
+    "Image": null
+  },
+  "Professor35": {
+    "Name": "Yuhong Yan",
+    "Description": "Associate Professor, Computer Science and Software Engineering",
+    "Office": "S-EV 3237",
+    "Phone": "(514) 848-2424 ext. 8715",
+    "Email": "yuhong.yan@concordia.ca",
+    "Website": "http://explore.concordia.ca/yuhong-yan",
+    "Image": "~/Content/images/professorProfile/YuhongYan.jpg"
+  },
+  "Professor36": {
+    "Name": "Daniel Sinnig",
+    "Description": "Part-time Professor",
+    "Office": "S-EV 3238",
+    "Phone": "(514) 848-2424 ext. 7128",
+    "Email": "d_sinnig@ece.concordia.ca",
+    "Website": null,
+    "Image": null
+  }
+}

@@ -1,7 +1,127 @@
-﻿
+﻿@model DreamSchedulerApplication.Models.ProfessorsData
+
 @{
     ViewBag.Title = "Professors";
 }
 
 <h2>Professors</h2>
 
+<table class="table">
+
+    <caption style="margin-bottom: 30px; font-weight: bold">Professor List</caption>
+    <tr>
+        <th>
+            Professor Name
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.professorsList)
+    {
+
+
+
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+
+            </td>
+            <td>
+                @{
+        string test = @item.name;
+        string t = test.Substring(0, 3);
+                }
+
+                <!-- Button trigger modal -->
+
+                <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal-@t">
+                    Show more info 
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal-@t" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Information</h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="modal-body">
+                                        <div>
+                                            @Html.LabelFor(ModelItem => item.name)
+                                            @Html.DisplayFor(ModelItem => item.name)
+                                        </div>
+                                        <div>
+                                            @Html.LabelFor(ModelItem => item.description)
+                                            @Html.DisplayFor(ModelItem => item.description)
+                                        </div>
+                                        <div>
+                                            @Html.LabelFor(ModelItem => item.office)
+                                            @Html.DisplayFor(ModelItem => item.office)
+                                        </div>
+                                        <div>
+                                            @Html.LabelFor(ModelItem => item.phone)
+                                            @Html.DisplayFor(ModelItem => item.phone)
+                                        </div>
+                                        <div>
+                                            @Html.LabelFor(ModelItem => item.email)
+                                            <a href="mailto:@Html.DisplayFor(ModelItem => item.email)">@Html.DisplayFor(ModelItem => item.email)</a>
+                                        </div>
+                                        <div>
+
+                                            @if (item.website != null)
+                                            {
+                                                @Html.LabelFor(ModelItem => item.website)
+                                                <a href="@Html.DisplayFor(ModelItem => item.website)">@Html.DisplayFor(ModelItem => item.website)</a>
+                                            }
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div style="max-height:250px; max-width:250px; margin:0; padding:0;">
+                                        <br />
+                                        @if (item.image != null)
+                                        {
+                                            <img style="height:80%; width:80%" src="@Url.Content(String.Format("~/Content/images/professorProfile/{0}.jpg",item.name)) ">
+                                        }
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+
+
+
+<!--
+
+
+    @using (Html.BeginForm("Professors", "Student", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+//@Html.AntiForgeryToken()
+
+                  //  @Html.HiddenFor(modelItem => item.name)
+
+                    <input type="submit" class="btn btn-primary" value="Show more info" />
+                }
+-->

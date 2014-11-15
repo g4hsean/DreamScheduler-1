@@ -95,7 +95,7 @@ namespace DreamSchedulerApplication.Controllers
                 var newUser = new User { Username = model.Username, Password = encryptedPassword, Roles = "student" };
 
                 var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, GPA = model.GPA };
-
+                //MATCH (u:User {Username:'admin'}) SET u.Roles = 'admin'
                 // create the account in the database
                 try
                 {
