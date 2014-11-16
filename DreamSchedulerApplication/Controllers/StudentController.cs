@@ -48,18 +48,6 @@ namespace DreamSchedulerApplication.Controllers
         public ActionResult Professors()
         {
 
-            //var prof = new ProfessorView();
-
-            //prof.pList = client.Cypher
-            //                      .Match("(u:Professor)")
-            //                      .Return((u) => new ProfessorView.Info
-            //                      {
-            //                          name = u.As<ProfessorsData.Professors>().name
-            //                      })
-            //                      .OrderBy("u.name")
-            //                      .Results;
-            //return View(prof);
-
             var prof = new ProfessorsData();
 
             prof.professorsList = client.Cypher
@@ -71,28 +59,16 @@ namespace DreamSchedulerApplication.Controllers
         }
 
 
-        //TESTING 
-        public ActionResult ProfessorsInfo()
-        {
-
-            
-            
-            var prof1 = client.Cypher
-                .Match("(u:Professor)")
-                .Where((ProfessorsData.Professors u) => u.name == "Joey Paquet")
-                .WithParam("name", "Joey Paquet")
-                .Return((u) => u.As<ProfessorsData.Professors>())
-                .Results.First();
-
-            @ViewBag.Search = true;
-            return RedirectToAction("Professors");
-        }
-
-
-
         public ActionResult Courses()
         {
-            return View();
+            var course = new CourseData();
+
+            course.courseList = client.Cypher
+                                  .Match("(u:Course)")
+                                  .Return(u => u.As<CourseData.CourseInfo>())
+                                  .OrderBy("u.courseName")
+                                  .Results;
+            return View(course);
         }
 
     }

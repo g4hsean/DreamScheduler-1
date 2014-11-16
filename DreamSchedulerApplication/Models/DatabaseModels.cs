@@ -39,9 +39,18 @@ namespace DreamSchedulerApplication.Models
         public int SemesterInSequence { get; set; }
     }
     //testing only
+
+    public class Database
+    {
+        public string DatabaseName { get; set;}
+        public string lastUpdate { get; set; }
+    }
+
+
+
     public class CourseData
     {
-        public IEnumerable<CourseInfo> Courses { get; set; }
+        public IEnumerable<CourseInfo> courseList { get; set; }
         public class CourseInfo
         {
             public string courseName { get; set; }
@@ -49,7 +58,6 @@ namespace DreamSchedulerApplication.Models
             public string Credits { get; set; }
             public string CourseDescription { get; set; }
 
-            public List<Semester> SemesterAvailable { get; set; }
 
 
             public class Semester
@@ -57,7 +65,6 @@ namespace DreamSchedulerApplication.Models
 
                 public string SemesterName { get; set; }
 
-                public List<Lecture> lecture { get; set; }
                 public class Lecture
                 {
                     //lecture
@@ -70,9 +77,17 @@ namespace DreamSchedulerApplication.Models
                     public string LectureBuilding { get; set; }
                     public string LectureRoom { get; set; }
                 }
+                public class Lab
+                {
+                    //tutorial
+                    public string LabSection { get; set; }
+                    public string LabStart { get; set; }
+                    public string LabEnd { get; set; }
+                    public string[] LabDays { get; set; }
 
-                public List<Tutorial> tutorial { get; set; }
-
+                    public string LabBuilding { get; set; }
+                    public string LabRoom { get; set; }
+                }
 
                 public class Tutorial
                 {
@@ -86,7 +101,6 @@ namespace DreamSchedulerApplication.Models
                     public string TutorialRoom { get; set; }
                 }
             }
-            //
             public string[] Restrictions { get; set; }
         }
     }

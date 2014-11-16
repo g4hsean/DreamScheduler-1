@@ -1,7 +1,35 @@
-﻿
+﻿@model DreamSchedulerApplication.Models.CourseData
 @{
     ViewBag.Title = "Courses";
 }
 
 <h2>Courses</h2>
 
+<table class="table">
+
+    <caption style="margin-bottom: 30px; font-weight: bold">Course List</caption>
+    <tr>
+        <th>
+            course ID 
+        </th>
+        <th>Course Name</th>
+    </tr>
+    @foreach (var item in Model.courseList)
+    {
+
+
+
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.courseName)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseDescription)
+            </td>
+                
+        </tr>
+    }
+
+</table>

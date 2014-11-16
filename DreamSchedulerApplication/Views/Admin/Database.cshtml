@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Database";
+    
 }
 
 <div class="jumbotron">
@@ -8,6 +9,31 @@
 
 <div>
 
-    <a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
-    <a href="@Url.Action("JsonProfessors", "Admin")" class="btn btn-primary btn-lg btn-block">update professor list</a>
+    @if (ViewBag.FoundD == "false")
+    {
+        <a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+    }
+    @if (ViewBag.FoundD == "true")
+    {
+        //<a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+         <button type="button" class="btn btn-primary btn-lg btn-block" disabled="disabled">Last update : @ViewBag.UpdateD</button>
+    //<a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+    }
+
+    <br/>
+    <br/>
+
+
+    @if (ViewBag.FoundP == "false")
+    {
+        <a href="@Url.Action("JsonProfessors", "Admin")" class="btn btn-primary btn-lg btn-block">update professor list</a>
+    }
+    @if (ViewBag.FoundP == "true")
+    {
+        //<a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+        <button type="button" class="btn btn-primary btn-lg btn-block" disabled="disabled">Last update : @ViewBag.UpdateP</button>
+        //<a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+    }
+
+
 </div>
