@@ -38,7 +38,7 @@ namespace DreamSchedulerApplication.Controllers
                          .Where((Student s) => s.StudentID == currentStudent.StudentID)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
-                             Course = c.As<Course>(),
+                             Course = c.As<CourseData.CourseInfo>(),
                              Completed = r.As<Completed>()
                          })
                          .OrderBy("r.semester")
@@ -61,11 +61,11 @@ namespace DreamSchedulerApplication.Controllers
         public ActionResult CreateCourseEntry(AcademicRecord.CourseEntry courseEntry)
         {
             if (ModelState.IsValid)
-            {
+            {   //(u:User)-[]->(s:Student)
                 //Add course
                 client.Cypher
-                .Match("(c:Course), (u:User)-->(s:Student)")
-                .Where((Course c) => c.Code == courseEntry.Course.Code)
+                .Match("(c:Course), (u:User)-[]->(s:Student)")
+                .Where((CourseData.CourseInfo c) => c.courseName == courseEntry.Course.courseName)
                 .AndWhere((User u) => u.Username == HttpContext.User.Identity.Name)
                 .Create("(s)-[r:Completed {completed}]->(c)")
                 .WithParam("completed", courseEntry.Completed)
@@ -87,11 +87,11 @@ namespace DreamSchedulerApplication.Controllers
             AcademicRecord.CourseEntry completedCourse = client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((Course c) => c.Code == code)
+                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Completed = r.As<Completed>(),
-                             Course = c.As<Course>()
+                             Course = c.As<CourseData.CourseInfo>()
                          })
                          .Results
                          .Single();
@@ -114,7 +114,7 @@ namespace DreamSchedulerApplication.Controllers
                 client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((Course c) => c.Code == completedCourse.Course.Code)
+                         .AndWhere((CourseData.CourseInfo c) => c.courseName == completedCourse.Course.courseName)
                          .Set("r = {newRelationship}")
                          .WithParam("newRelationship", completedCourse.Completed)
                          .ExecuteWithoutResults();
@@ -134,11 +134,11 @@ namespace DreamSchedulerApplication.Controllers
             AcademicRecord.CourseEntry completedCourse = client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((Course c) => c.Code == code)
+                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Completed = r.As<Completed>(),
-                             Course = c.As<Course>()
+                             Course = c.As<CourseData.CourseInfo>()
                          })
                          .Results
                          .Single();
@@ -161,7 +161,7 @@ namespace DreamSchedulerApplication.Controllers
                 client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((Course c) => c.Code == code)
+                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
                          .Delete("r")
                          .ExecuteWithoutResults();
 

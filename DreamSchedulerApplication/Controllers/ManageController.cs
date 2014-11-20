@@ -23,7 +23,7 @@ namespace DreamSchedulerApplication.Controllers
         {
             var academicRecord = new AcademicRecord();
 
-            var student1 = client.Cypher
+            var student = client.Cypher
                 .Match("(u:User)-[]->(s:Student)")
                 .Where((User u) => u.Username == HttpContext.User.Identity.Name)
                 .WithParam("username", HttpContext.User.Identity.Name)
@@ -31,7 +31,7 @@ namespace DreamSchedulerApplication.Controllers
                 .Results.First();
 
 
-            academicRecord.Student = student1;
+            academicRecord.Student = student;
 
             return View(academicRecord);
         }
@@ -41,47 +41,37 @@ namespace DreamSchedulerApplication.Controllers
             var academicRecord = new AcademicRecord();
 
 
-            var student1 = client.Cypher
+            var student = client.Cypher
                 .Match("(u:User)-[]->(s:Student)")
                 .Where((User u) => u.Username == HttpContext.User.Identity.Name)
                 .WithParam("username", HttpContext.User.Identity.Name)
                 .Return((s) => s.As<Student>())
                 .Results.First();
 
-            academicRecord.Student = student1;
+            academicRecord.Student = student;
 
             return View(academicRecord);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AccountEdit(AcademicRecord model)
         {
 
-            var teststudent = new Student { FirstName = model.Student.FirstName, LastName = model.Student.LastName, StudentID = model.Student.StudentID, GPA = model.Student.GPA };
+            var newStudent = new Student { FirstName = model.Student.FirstName, LastName = model.Student.LastName, StudentID = model.Student.StudentID, GPA = model.Student.GPA };
 
 
-            //NEED TO JOIN THESE TWO QUERY if possible
-
-            //find the student node matched to that account
-            var student1 = client.Cypher
-               .Match("(u:User)-[]->(s:Student)")
-               .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-               .WithParam("username", HttpContext.User.Identity.Name)
-               .Return((s) => s.As<Student>())
-               .Results.First();
-
-            //update student node information
             client.Cypher
-                .Match("(s:Student)")
-                .Where((Student s) => s.StudentID == student1.StudentID)
-                .Set("s = {student}")
-                .WithParam("student", new Student { StudentID = teststudent.StudentID, FirstName = teststudent.FirstName, LastName = teststudent.LastName, GPA = teststudent.GPA })
-                .ExecuteWithoutResults();
+               .Match("(u:User)-->(s:Student)")
+               .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+               .AndWhere((Student s) => s.StudentID == model.Student.StudentID)
+               .Set("s = {newStudent}")
+               .WithParam("newStudent", newStudent)
+               .ExecuteWithoutResults();
 
-            return RedirectToAction("Account");
+            return RedirectToAction("Index");
 
         }
-
 
     }
 }

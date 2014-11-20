@@ -35,7 +35,7 @@ namespace DreamSchedulerApplication.Controllers
                          .Match("(p:Program)-[r]->(c:Course)")
                          .Return((c, r) => new CourseSequence.CourseEntry
                          {
-                             Course = c.As<Course>(),
+                             Course = c.As<CourseData.CourseInfo>(),
                              Semester = r.As<ContainsCourse>().SemesterInSequence
                          })
                          .OrderBy("r.SemesterInSequence")

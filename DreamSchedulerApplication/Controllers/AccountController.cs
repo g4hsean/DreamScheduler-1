@@ -133,6 +133,5 @@ namespace DreamSchedulerApplication.Controllers
             //HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return RedirectToAction("Index", "Home");
         }
-
     }
 }

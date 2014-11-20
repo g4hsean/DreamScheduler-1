@@ -11,7 +11,7 @@
 
     @if (ViewBag.FoundD == "false")
     {
-        <a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">will be use to load course list</a>
+        <a href="@Url.Action("DatabaseUpdate", "Admin")" class="btn btn-primary btn-lg btn-block">Update course list</a>
     }
     @if (ViewBag.FoundD == "true")
     {
@@ -26,7 +26,7 @@
 
     @if (ViewBag.FoundP == "false")
     {
-        <a href="@Url.Action("JsonProfessors", "Admin")" class="btn btn-primary btn-lg btn-block">update professor list</a>
+        <a href="@Url.Action("JsonProfessors", "Admin")" class="btn btn-primary btn-lg btn-block">Update professor list</a>
     }
     @if (ViewBag.FoundP == "true")
     {

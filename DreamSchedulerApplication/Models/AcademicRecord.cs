@@ -14,7 +14,7 @@ namespace DreamSchedulerApplication.Models
 
         public class CourseEntry
         {
-            public Course Course { get; set; }
+            public CourseData.CourseInfo Course { get; set; }
             public Completed Completed { get; set; }
         }
     }

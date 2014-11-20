@@ -21,12 +21,6 @@ namespace DreamSchedulerApplication.Models
         public string GPA { get; set; }
     }
 
-    public class Course
-    {
-        public string Code { get; set; }
-        public string Title { get; set; }
-        public string Credits { get; set; }
-    }
 
     public class Completed
     {
@@ -38,8 +32,8 @@ namespace DreamSchedulerApplication.Models
     {
         public int SemesterInSequence { get; set; }
     }
-    //testing only
 
+    //Initialization of database
     public class Database
     {
         public string DatabaseName { get; set;}
@@ -47,7 +41,7 @@ namespace DreamSchedulerApplication.Models
     }
 
 
-
+    //ALL ABOUT COURSE
     public class CourseData
     {
         public IEnumerable<CourseInfo> courseList { get; set; }
@@ -106,7 +100,7 @@ namespace DreamSchedulerApplication.Models
     }
 
    
-    //testing only
+    //ALL data on profress
     public class ProfessorsData
     {
         public IEnumerable<Professors> professorsList { get; set; }

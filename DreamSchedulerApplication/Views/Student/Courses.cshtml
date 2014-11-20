@@ -5,14 +5,15 @@
 
 <h2>Courses</h2>
 
-<table class="table">
+<table class="table table-striped">
 
-    <caption style="margin-bottom: 30px; font-weight: bold">Course List</caption>
-    <tr>
+    <caption style="margin-bottom: 30px; font-weight: bold"><h3>Course List</h3></caption>
+    <tr class="btn-primary">
         <th>
-            course ID 
+            course ID
         </th>
         <th>Course Name</th>
+        <th>Credit</th>
     </tr>
     @foreach (var item in Model.courseList)
     {
@@ -20,7 +21,7 @@
 
 
 
-        <tr>
+        <tr >
             <td>
                 @Html.DisplayFor(modelItem => item.courseName)
 
@@ -28,7 +29,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CourseDescription)
             </td>
-                
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+
         </tr>
     }
 

@@ -66,7 +66,7 @@ namespace DreamSchedulerApplication.Controllers
                     return View();
 
                 }
-                catch(InvalidOperationException)
+                catch (InvalidOperationException)
                 {
                     ViewBag.FoundD = "true";
                     ViewBag.UpdateD = database.lastUpdate;
@@ -140,15 +140,15 @@ namespace DreamSchedulerApplication.Controllers
              * 
              * */
 
-            //var p = new Process();
-            //p.StartInfo.FileName = @"Python.exe";
-            //p.StartInfo.Arguments = "scrapper.py";
-            //p.StartInfo.WorkingDirectory = @"C:\Python27";
-            //p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-            //p.StartInfo.UseShellExecute = false;
-            ////p.StartInfo.RedirectStandardOutput = true;
-            //p.Start();
-            //p.WaitForExit();
+            var p = new Process();
+            p.StartInfo.FileName = @"Python.exe";
+            p.StartInfo.Arguments = "scrapper.py";
+            p.StartInfo.WorkingDirectory = @"C:\Python27";
+            p.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
+            p.StartInfo.UseShellExecute = false;
+            //p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+            p.WaitForExit();
 
 
             /*
@@ -159,7 +159,6 @@ namespace DreamSchedulerApplication.Controllers
              *  - after being matched, a node will be created in the database containing that information
              *              *
              * */
-
 
             //prereq, course date, restrtic, have their own childen 
 
@@ -469,7 +468,7 @@ namespace DreamSchedulerApplication.Controllers
                                 }//end tutorial
                             }
                         }
-                        catch(ArgumentOutOfRangeException)
+                        catch (ArgumentOutOfRangeException)
                         {
                             //no lab, no tutorial 
                         }
@@ -531,14 +530,11 @@ namespace DreamSchedulerApplication.Controllers
                 };
 
 
-
                 // create the professor in the database
                 client.Cypher
                             .Create("(u:Professor {newProfessor})")
                             .WithParam("newProfessor", newProfessor)
                             .ExecuteWithoutResults();
-
-
 
             }
             return View();
