@@ -185,7 +185,8 @@ namespace DreamSchedulerApplication.Controllers
 
                 var NotUsedCourseInfo = courseName.Substring(0, 4);
 
-                if (NotUsedCourseInfo != "CWTC")
+                if (NotUsedCourseInfo != "CWTC" && NotUsedCourseInfo != "BCEE" && NotUsedCourseInfo != "BLDG"
+                    && NotUsedCourseInfo != "CIVI" && NotUsedCourseInfo != "COEN" && NotUsedCourseInfo != "MECH" && NotUsedCourseInfo != "INDU" && NotUsedCourseInfo != "IADI")
                 {
                     var courseInfo = loopCourses.ElementAt(0).ToObject<CourseData.CourseInfo>();// get credits, get prerequisites, get restrictions
                     string[] prereq = courseInfo.Prerequisites;

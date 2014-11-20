@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace DreamSchedulerApplication.Models
 {
@@ -15,10 +16,11 @@ namespace DreamSchedulerApplication.Models
 
     public class Student
     {
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string StudentID { get; set; }
-        public string GPA { get; set; }
+        public int StudentID { get; set; }
+        public int GPA { get; set; }
     }
 
 
@@ -47,9 +49,11 @@ namespace DreamSchedulerApplication.Models
         public IEnumerable<CourseInfo> courseList { get; set; }
         public class CourseInfo
         {
+            [Display(Name = "Course ID ")]
             public string courseName { get; set; }
             public string[] Prerequisites { get; set; }
             public string Credits { get; set; }
+            [Display(Name = "Course Name ")]
             public string CourseDescription { get; set; }
 
 

@@ -8,15 +8,43 @@
 <table class="table table-striped">
 
     <caption style="margin-bottom: 30px; font-weight: bold"><h3>Course List</h3></caption>
-    <tr class="btn-primary">
+    <tr class="success">
         <th>
             course ID
         </th>
         <th>Course Name</th>
         <th>Credit</th>
     </tr>
+    
+    @{
+        string tableName = "test";
+    }
+
     @foreach (var item in Model.courseList)
     {
+
+
+        <tr class="text-center">
+            
+            @{
+
+        {
+            var test = item.courseName;
+            var test1 = test.Substring(0, 4);
+            if (test1 != tableName && test1 != "CWTE")
+            {
+                <th class="success"></th>
+                <th class="success text-center">@test1</th>
+                tableName = test1;
+                <th class="success"></th>
+            }
+
+        }
+
+            }
+            
+        </tr>
+
 
 
 

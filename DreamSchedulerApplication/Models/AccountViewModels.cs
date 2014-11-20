@@ -18,13 +18,14 @@ namespace DreamSchedulerApplication.Models
 
     public class RegisterViewModel
     {
+        //"The {0} must be at least {2} characters long.", MinimumLength = 5
         [Required(ErrorMessage = "Username is required")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [StringLength(100, ErrorMessage = "The {0} must be between {2} and  {1} characters long.", MinimumLength = 5)]
         [Display(Name = "Username")]
         public string Username { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [StringLength(100, ErrorMessage = "The {0} must be between {2} and  {1} characters long.", MinimumLength = 5)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -44,10 +45,11 @@ namespace DreamSchedulerApplication.Models
 
         [Required(ErrorMessage = "Your student ID is required")]
         [Display(Name = "Student ID")]
-        public string StudentID { get; set; }
+        public int StudentID { get; set; }
 
+        [Range(0.0, 4.3, ErrorMessage= "Your GPA must be between 0 and 4.3")]
         [Required(ErrorMessage = "Your GPA is required")]
         [Display(Name = "GPA")]
-        public string GPA { get; set; }
+        public int GPA { get; set; }
     }
 }

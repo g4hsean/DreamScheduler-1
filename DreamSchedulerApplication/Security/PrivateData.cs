@@ -58,82 +58,82 @@ namespace DreamSchedulerApplication.Security
         }
 
 
-        // if required specific data quicly 
-        //FIND STUDENT then return ( first name, last name, id, gpa)
-        public string GetStudentID()
-        {
+        //// if required specific data quicly 
+        ////FIND STUDENT then return ( first name, last name, id, gpa)
+        //public string GetStudentID()
+        //{
 
-            if(HttpContext.Current.User.Identity.Name != null )
-            {
-                client.Connect();
-                var studentFound = client.Cypher
-                    .Match("(u:User)-[]->(s:Student)")
-                    .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
-                    .WithParam("username", HttpContext.Current.User.Identity.Name)
-                    .Return((s) => s.As<Student>())
-                    .Results.First();
+        //    if(HttpContext.Current.User.Identity.Name != null )
+        //    {
+        //        client.Connect();
+        //        var studentFound = client.Cypher
+        //            .Match("(u:User)-[]->(s:Student)")
+        //            .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
+        //            .WithParam("username", HttpContext.Current.User.Identity.Name)
+        //            .Return((s) => s.As<Student>())
+        //            .Results.First();
                 
-                return studentFound.StudentID;
-            }
-            return null; // user isn't authenticated
+        //        return studentFound.StudentID;
+        //    }
+        //    return null; // user isn't authenticated
 
-        }
-        public string GetStudentFN()
-        {
+        //}
+        //public string GetStudentFN()
+        //{
 
 
-            if (HttpContext.Current.User.Identity.Name != null)
-            {
-                client.Connect();
-                var studentFound = client.Cypher
-                    .Match("(u:User)-[]->(s:Student)")
-                    .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
-                    .WithParam("username", HttpContext.Current.User.Identity.Name)
-                    .Return((s) => s.As<Student>())
-                    .Results.First();
+        //    if (HttpContext.Current.User.Identity.Name != null)
+        //    {
+        //        client.Connect();
+        //        var studentFound = client.Cypher
+        //            .Match("(u:User)-[]->(s:Student)")
+        //            .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
+        //            .WithParam("username", HttpContext.Current.User.Identity.Name)
+        //            .Return((s) => s.As<Student>())
+        //            .Results.First();
 
-                return studentFound.FirstName;
-            }
-            return null; // user isn't authenticated
-        }
+        //        return studentFound.FirstName;
+        //    }
+        //    return null; // user isn't authenticated
+        //}
 
-        public string GetStudentLN()
-        {
-            if (HttpContext.Current.User.Identity.Name != null)
-            {
-                client.Connect();
-                var studentFound = client.Cypher
-                    .Match("(u:User)-[]->(s:Student)")
-                    .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
-                    .WithParam("username", HttpContext.Current.User.Identity.Name)
-                    .Return((s) => s.As<Student>())
-                    .Results.First();
+        //public string GetStudentLN()
+        //{
+        //    if (HttpContext.Current.User.Identity.Name != null)
+        //    {
+        //        client.Connect();
+        //        var studentFound = client.Cypher
+        //            .Match("(u:User)-[]->(s:Student)")
+        //            .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
+        //            .WithParam("username", HttpContext.Current.User.Identity.Name)
+        //            .Return((s) => s.As<Student>())
+        //            .Results.First();
 
-                return studentFound.LastName;
-            }
-            return null; // user isn't authenticated
+        //        return studentFound.LastName;
+        //    }
+        //    return null; // user isn't authenticated
 
-        }
-        public string GetStudentGPA()
-        {
-            // find user from authenticated user
-            string username = GetUserName();
+        //}
+        //public string GetStudentGPA()
+        //{
+        //    // find user from authenticated user
+        //    string username = GetUserName();
 
-            if (HttpContext.Current.User.Identity.Name != null)
-            {
-                client.Connect();
-                var studentFound = client.Cypher
-                    .Match("(u:User)-[]->(s:Student)")
-                    .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
-                    .WithParam("username", HttpContext.Current.User.Identity.Name)
-                    .Return((s) => s.As<Student>())
-                    .Results.First();
+        //    if (HttpContext.Current.User.Identity.Name != null)
+        //    {
+        //        client.Connect();
+        //        var studentFound = client.Cypher
+        //            .Match("(u:User)-[]->(s:Student)")
+        //            .Where((User u) => u.Username == HttpContext.Current.User.Identity.Name)
+        //            .WithParam("username", HttpContext.Current.User.Identity.Name)
+        //            .Return((s) => s.As<Student>())
+        //            .Results.First();
 
-                return studentFound.GPA;
-            }
-            return null; // user isn't authenticated
+        //        return studentFound.GPA;
+        //    }
+        //    return null; // user isn't authenticated
 
-        }
+        //}
 
 
 
