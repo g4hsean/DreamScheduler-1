@@ -1,7 +1,7 @@
-﻿@model DreamSchedulerApplication.Models.CourseSequence
+﻿@model System.Collections.Generic.IEnumerable<DreamSchedulerApplication.Models.Course>
 
 @{
-    ViewBag.Title = "CourseSequence";
+    ViewBag.Title = "Course Sequence";
 }
 
 <h2>CourseSequence</h2>
@@ -24,7 +24,7 @@
         </th>
         <th></th>
     </tr>
-    @foreach (var item in Model.CourseList)
+    @foreach (var item in Model)
     {
         <tr>
             <td>

@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Diagnostics;
 using DreamSchedulerApplication.Models;
 
-//test
 using Newtonsoft.Json;
-using Newtonsoft;
 using System.IO;
 using Neo4jClient;
 using Newtonsoft.Json.Linq;
-//test
 
 namespace DreamSchedulerApplication.Controllers
 {
-    //only admin can access
     [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
@@ -27,9 +21,7 @@ namespace DreamSchedulerApplication.Controllers
             client = graphClient;
         }
 
-
-
-        // GET: Admin
+        // GET: Admin/Index
         public ActionResult Index()
         {
             return View();
@@ -162,11 +154,10 @@ namespace DreamSchedulerApplication.Controllers
                 var semesters = course.ElementAt(0).ElementAt(4).ElementAt(0);
                 foreach(var semester in semesters)
                 {
-                   string semesterName = ((Newtonsoft.Json.Linq.JProperty)(semester)).Name;
                     
-                   var semesterNode = new CourseData.CourseInfo.Semester
+                   var semesterNode = new Course.Semester
                    {
-                       SemesterName = semesterName
+                       Name = ((Newtonsoft.Json.Linq.JProperty)(semester)).Name
                    };
 
                    //Create semester node and relationship to the course
@@ -207,7 +198,7 @@ namespace DreamSchedulerApplication.Controllers
                                client.Cypher
                                        .Match("(n:Course)-[has]->(s:Semester)")
                                        .Where((Course n) => n.Code == newCourse.Code)
-                                       .AndWhere((CourseData.CourseInfo.Semester s) => s.SemesterName == semesterName)
+                                       .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
                                        .Create("s-[:has]->(l:Lecture {newLecture})")
                                        .WithParam("newLecture", newLecture)
                                        .ExecuteWithoutResults();
@@ -235,7 +226,7 @@ namespace DreamSchedulerApplication.Controllers
                                 client.Cypher
                                         .Match("(n:Course)-[has]->(s:Semester)")
                                         .Where((Course n) => n.Code == newCourse.Code)
-                                        .AndWhere((CourseData.CourseInfo.Semester s) => s.SemesterName == semesterName)
+                                        .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
                                         .Create("s-[:has]->(l:Lab {newLab})")
                                         .WithParam("newLab", newLab)
                                         .ExecuteWithoutResults();
@@ -264,7 +255,7 @@ namespace DreamSchedulerApplication.Controllers
                                client.Cypher
                                        .Match("(n:Course)-[has]->(s:Semester)")
                                        .Where((Course n) => n.Code == newCourse.Code)
-                                       .AndWhere((CourseData.CourseInfo.Semester s) => s.SemesterName == semesterName)
+                                       .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
                                        .Create("s-[:has]->(l:Tutorial {newTutorial})")
                                        .WithParam("newTutorial", newTutorial)
                                        .ExecuteWithoutResults();
@@ -300,8 +291,10 @@ namespace DreamSchedulerApplication.Controllers
         //working 
         public ActionResult JsonProfessors()
         {
+            //When run first time
+            //Create new Database nodes with timestamps
+            //Only for creating new database, has to be modified to support updating
 
-            //WHEN run first time 
             string time = DateTime.Now.ToString("yyyy-MM-ddThh:mm:sszzz");
             var newDatabase = new Database { DatabaseName = "professors", lastUpdate = time };
 
@@ -310,42 +303,22 @@ namespace DreamSchedulerApplication.Controllers
                 .WithParam("newDatabase", newDatabase)
                 .ExecuteWithoutResults();
 
-
-
-
+            //Load professor data from JSON file
             StreamReader reader = System.IO.File.OpenText(@"C:/Python27/professors.json");
-            JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+            JObject professorFile = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
 
+            var professors = professorFile.Children();
 
-            int nbElement = o.Count; //number of professors
-
-            var ProfList = o.Children(); //get all professors
-
-            //find each prof and insert them in the database
-            for (int i = 0; i < nbElement; i++)
+            foreach(var professor in professors)
             {
-
-                var professor = ProfList.ElementAt(i).First.ToObject<ProfessorsData.Professors>();
-
-                var newProfessor = new ProfessorsData.Professors
-                {
-                    name = professor.name,
-                    description = professor.description,
-                    email = professor.email,
-                    image = professor.image,
-                    office = professor.office,
-                    phone = professor.phone,
-                    website = professor.website
-                };
-
-
-                // create the professor in the database
+                var newProfessor = professor.First.ToObject<Professor>();
+                //Create professor node in the database
                 client.Cypher
                             .Create("(u:Professor {newProfessor})")
                             .WithParam("newProfessor", newProfessor)
                             .ExecuteWithoutResults();
-
             }
+
             return View();
         }
 

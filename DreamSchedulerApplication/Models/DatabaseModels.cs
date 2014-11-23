@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DreamSchedulerApplication.Models
 {
+    //Node classes
     public class User
     {
         public String Username { get; set; }
@@ -23,22 +24,9 @@ namespace DreamSchedulerApplication.Models
         public int GPA { get; set; }
     }
 
-
-    public class Completed
-    {
-        public string Grade { get; set; }
-        public int Semester { get; set; }
-    }
-
-    public class ContainsCourse
-    {
-        public int SemesterInSequence { get; set; }
-    }
-
-    //Initialization of database
     public class Database
     {
-        public string DatabaseName { get; set;}
+        public string DatabaseName { get; set; }
         public string lastUpdate { get; set; }
     }
 
@@ -48,6 +36,11 @@ namespace DreamSchedulerApplication.Models
         public string Credits { get; set; }
         public string Title { get; set; }
         public int SemesterInSequence { get; set; }
+
+        public class Semester
+        {
+            public string Name { get; set; }
+        }
 
         public class Activity
         {
@@ -68,81 +61,22 @@ namespace DreamSchedulerApplication.Models
         public class Tutorial : Activity { }
     }
 
-    //ALL ABOUT COURSE
-    public class CourseData
+    public class Professor
     {
-        public IEnumerable<CourseInfo> courseList { get; set; }
-        public class CourseInfo
-        {
-            [Display(Name = "Course ID ")]
-            public string courseName { get; set; }
-            public string[] Prerequisites { get; set; }
-            public string Credits { get; set; }
-            [Display(Name = "Course Name ")]
-            public string CourseDescription { get; set; }
-
-
-
-            public class Semester
-            {
-
-                public string SemesterName { get; set; }
-
-                public class Lecture
-                {
-                    //lecture
-                    public string Professor { get; set; }
-                    public string Section { get; set; }
-                    public string LectureStart { get; set; }
-                    public string LectureEnd { get; set; }
-                    public string[] LectureDays { get; set; }
-
-                    public string LectureBuilding { get; set; }
-                    public string LectureRoom { get; set; }
-                }
-                public class Lab
-                {
-                    //tutorial
-                    public string LabSection { get; set; }
-                    public string LabStart { get; set; }
-                    public string LabEnd { get; set; }
-                    public string[] LabDays { get; set; }
-
-                    public string LabBuilding { get; set; }
-                    public string LabRoom { get; set; }
-                }
-
-                public class Tutorial
-                {
-                    //tutorial
-                    public string TutorialSection { get; set; }
-                    public string TutorialStart { get; set; }
-                    public string TutorialEnd { get; set; }
-                    public string[] TutorialDays { get; set; }
-
-                    public string TutorialBuilding { get; set; }
-                    public string TutorialRoom { get; set; }
-                }
-            }
-            public string[] Restrictions { get; set; }
-        }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Office { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+        public string Image { get; set; }
     }
 
-   
-    //ALL data on profress
-    public class ProfessorsData
+    //Relationship classes
+    public class Completed
     {
-        public IEnumerable<Professors> professorsList { get; set; }
-        public class Professors
-        {
-            public string name { get; set;}
-            public string description { get; set; }
-            public string office { get; set; }
-            public string phone { get; set; }
-            public string email { get; set; }
-            public string website { get; set; }
-            public string image { get; set; }
-        }
+        public string Grade { get; set; }
+        public int Semester { get; set; }
     }
 
 }

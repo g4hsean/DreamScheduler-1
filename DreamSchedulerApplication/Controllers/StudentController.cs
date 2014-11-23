@@ -1,37 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using DreamSchedulerApplication.Models;
 using Neo4jClient;
-using DreamSchedulerApplication.Security;
 
 namespace DreamSchedulerApplication.Controllers
 {
-    //only student can access
     [Authorize(Roles="student")]
     public class StudentController : Controller
     {
-         private readonly IGraphClient client;
+        private readonly IGraphClient client;
 
         public StudentController(IGraphClient graphClient)
         {
             client = graphClient;
         }
-        
 
-        // GET: Member
+        //GET: Student/Index
         public ActionResult Index()
         {
             return View();
         }
 
+        //GET: Student/CourseSequence
         public ActionResult CourseSequence()
         {
-            var courseSequence = new CourseSequence();
-            
-            courseSequence.CourseList = client.Cypher
+            IEnumerable<Course> courseSequence = client.Cypher
                          .Match("(c:Course)")
                          .Return(c => c.As<Course>())
                          .OrderBy("c.SemesterInSequence")
@@ -40,31 +33,16 @@ namespace DreamSchedulerApplication.Controllers
             return View(courseSequence);
         }
 
-
+        //GET: Student/Professors
         public ActionResult Professors()
         {
-
-            var prof = new ProfessorsData();
-
-            prof.professorsList = client.Cypher
+            IEnumerable<Professor> professorsList = client.Cypher
                                   .Match("(u:Professor)")
-                                  .Return(u =>u.As<ProfessorsData.Professors>())
+                                  .Return(u =>u.As<Professor>())
                                   .OrderBy("u.name")
                                   .Results;
-            return View(prof);
-        }
 
-
-        public ActionResult Courses()
-        {
-            var course = new CourseData();
-
-            course.courseList = client.Cypher
-                                  .Match("(u:Course)")
-                                  .Return(u => u.As<CourseData.CourseInfo>())
-                                  .OrderBy("u.courseName")
-                                  .Results;
-            return View(course);
+            return View(professorsList);
         }
 
     }

@@ -20,6 +20,7 @@ namespace DreamSchedulerApplication.Controllers
             client = graphClient;
         }
 
+        //Get AcademicRecord/Index
         public ActionResult Index()
         {
 
@@ -47,13 +48,13 @@ namespace DreamSchedulerApplication.Controllers
             return View(academicRecord);
         }
 
-        // GET: Movies/Create
+        // GET: AcademicRecord/CreateCourseEntry
         public ActionResult CreateCourseEntry()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: AcademicRecord/CreateCourseEntry
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -77,7 +78,7 @@ namespace DreamSchedulerApplication.Controllers
             return View(courseEntry);
         }
 
-        // GET: Movies/Edit/5
+        // GET: AcademicRecord/EditCourseEntry
         public ActionResult EditCourseEntry(string code)
         {
             if (code == null)
@@ -102,7 +103,7 @@ namespace DreamSchedulerApplication.Controllers
             return View(completedCourse);
         }
 
-        // POST: Movies/Edit/5
+        // POST: AcademicRecord/EditCourseEntry
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -124,7 +125,7 @@ namespace DreamSchedulerApplication.Controllers
             return View(completedCourse);
         }
 
-        // GET: Movies/Edit/5
+        // GET: AcademicRecord/DeleteCourseEntry
         public ActionResult DeleteCourseEntry(string code)
         {
             if (code == null)
@@ -149,7 +150,7 @@ namespace DreamSchedulerApplication.Controllers
             return View(completedCourse);
         }
 
-        // POST: Movies/Edit/5
+        // POST: AcademicRecord/DeleteCourseEntry
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("DeleteCourseEntry")]
