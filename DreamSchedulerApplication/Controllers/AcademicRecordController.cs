@@ -38,7 +38,7 @@ namespace DreamSchedulerApplication.Controllers
                          .Where((Student s) => s.StudentID == currentStudent.StudentID)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
-                             Course = c.As<CourseData.CourseInfo>(),
+                             Course = c.As<Course>(),
                              Completed = r.As<Completed>()
                          })
                          .OrderBy("r.semester")
@@ -65,7 +65,7 @@ namespace DreamSchedulerApplication.Controllers
                 //Add course
                 client.Cypher
                 .Match("(c:Course), (u:User)-[]->(s:Student)")
-                .Where((CourseData.CourseInfo c) => c.courseName == courseEntry.Course.courseName)
+                .Where((Course c) => c.Code == courseEntry.Course.Code)
                 .AndWhere((User u) => u.Username == HttpContext.User.Identity.Name)
                 .Create("(s)-[r:Completed {completed}]->(c)")
                 .WithParam("completed", courseEntry.Completed)
@@ -87,11 +87,11 @@ namespace DreamSchedulerApplication.Controllers
             AcademicRecord.CourseEntry completedCourse = client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
+                         .AndWhere((Course c) => c.Code == code)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Completed = r.As<Completed>(),
-                             Course = c.As<CourseData.CourseInfo>()
+                             Course = c.As<Course>()
                          })
                          .Results
                          .Single();
@@ -114,7 +114,7 @@ namespace DreamSchedulerApplication.Controllers
                 client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((CourseData.CourseInfo c) => c.courseName == completedCourse.Course.courseName)
+                         .AndWhere((Course c) => c.Code == completedCourse.Course.Code)
                          .Set("r = {newRelationship}")
                          .WithParam("newRelationship", completedCourse.Completed)
                          .ExecuteWithoutResults();
@@ -134,11 +134,11 @@ namespace DreamSchedulerApplication.Controllers
             AcademicRecord.CourseEntry completedCourse = client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
+                         .AndWhere((Course c) => c.Code == code)
                          .Return((c, r) => new AcademicRecord.CourseEntry
                          {
                              Completed = r.As<Completed>(),
-                             Course = c.As<CourseData.CourseInfo>()
+                             Course = c.As<Course>()
                          })
                          .Results
                          .Single();
@@ -161,7 +161,7 @@ namespace DreamSchedulerApplication.Controllers
                 client.Cypher
                          .Match("(u:User)-->(s:Student)-[r:Completed]->(c:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
-                         .AndWhere((CourseData.CourseInfo c) => c.courseName == code)
+                         .AndWhere((Course c) => c.Code == code)
                          .Delete("r")
                          .ExecuteWithoutResults();
 

@@ -32,13 +32,9 @@ namespace DreamSchedulerApplication.Controllers
             var courseSequence = new CourseSequence();
             
             courseSequence.CourseList = client.Cypher
-                         .Match("(p:Program)-[r]->(c:Course)")
-                         .Return((c, r) => new CourseSequence.CourseEntry
-                         {
-                             Course = c.As<CourseData.CourseInfo>(),
-                             Semester = r.As<ContainsCourse>().SemesterInSequence
-                         })
-                         .OrderBy("r.SemesterInSequence")
+                         .Match("(c:Course)")
+                         .Return(c => c.As<Course>())
+                         .OrderBy("c.SemesterInSequence")
                          .Results;
 
             return View(courseSequence);

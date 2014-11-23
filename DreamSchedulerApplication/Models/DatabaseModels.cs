@@ -42,6 +42,31 @@ namespace DreamSchedulerApplication.Models
         public string lastUpdate { get; set; }
     }
 
+    public class Course
+    {
+        public string Code { get; set; }
+        public string Credits { get; set; }
+        public string Title { get; set; }
+        public int SemesterInSequence { get; set; }
+
+        public class Activity
+        {
+            public string Section { get; set; }
+            public string StartTime { get; set; }
+            public string EndTime { get; set; }
+            public string[] Days { get; set; }
+            public string Building { get; set; }
+            public string Room { get; set; }
+        }
+
+        public class Lecture : Activity
+        {
+            public string Professor { get; set; }
+        }
+
+        public class Lab : Activity { }
+        public class Tutorial : Activity { }
+    }
 
     //ALL ABOUT COURSE
     public class CourseData

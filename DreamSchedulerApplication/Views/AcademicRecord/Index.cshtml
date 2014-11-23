@@ -32,7 +32,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Course.courseName)
+                @Html.DisplayFor(modelItem => item.Course.Code)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Completed.Semester)
@@ -41,8 +41,8 @@
                 @Html.DisplayFor(modelItem => item.Completed.Grade)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditCourseEntry", new { code = item.Course.courseName }) |
-                @Html.ActionLink("Delete", "DeleteCourseEntry", new { code = item.Course.courseName })
+                @Html.ActionLink("Edit", "EditCourseEntry", new { code = item.Course.Code}) |
+                @Html.ActionLink("Delete", "DeleteCourseEntry", new { code = item.Course.Code })
             </td>
         </tr>
     }
