@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DreamSchedulerApplication.Models
@@ -46,6 +47,11 @@ namespace DreamSchedulerApplication.Models
         [Required(ErrorMessage = "Your student ID is required")]
         [Display(Name = "Student ID")]
         public int StudentID { get; set; }
+
+        public static IEnumerable<string> EntryOptions = new List<string>() { "Fall", "Winter"};
+
+        [Display(Name = "Entry")]
+        public string Entry { get; set; }
 
         [Range(0.0, 4.3, ErrorMessage= "Your GPA must be between 0 and 4.3")]
         [Required(ErrorMessage = "Your GPA is required")]

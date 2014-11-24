@@ -21,6 +21,7 @@ namespace DreamSchedulerApplication.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int StudentID { get; set; }
+        public string Entry  { get; set; }
         public int GPA { get; set; }
     }
 
@@ -77,6 +78,12 @@ namespace DreamSchedulerApplication.Models
     {
         public string Grade { get; set; }
         public int Semester { get; set; }
+    }
+
+    public class Scheduled
+    {
+        public string SemesterSeason { get; set; }
+        public int SemesterNumber { get; set; }
     }
 
 }

@@ -1,0 +1,47 @@
+﻿@model System.Collections.Generic.List<DreamSchedulerApplication.Models.Sequence.CourseEntry>
+
+@{
+    ViewBag.Title = "Custom Course Sequence";
+}
+
+<h2>CourseSequence</h2>
+
+<table class="table">
+
+    <caption style="margin-bottom: 30px; font-weight: bold">Course sequence</caption>
+    <tr>
+        <th>
+            Semester in sequence
+        </th>
+        <th>
+            Semester scheduled
+        </th>
+        <th>
+            Semester season
+        </th>
+        <th>
+            Title
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.SemesterInSequence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SemesterName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Code)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<p> @Html.ActionLink("Reset sequence", "ResetCustomSequence")  </p>

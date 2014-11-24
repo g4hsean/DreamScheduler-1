@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 from bs4 import BeautifulSoup
 import requests
 import sys
@@ -9,6 +8,7 @@ import pprint
 import json
 from unidecode import unidecode
 import os
+from time import time
 
 def convertTimeFormat(dateTime):
     dateConverter = {'M' : 'Monday', 'T' : 'Tuesday', 'W': 'Wednesday', 'J' : 'Thursday', 'F': 'Friday', 'S' : 'Saturday', 'D' : 'Sunday'} # used to convert M--J--- to a list of Monday, Thursday
@@ -28,7 +28,7 @@ def convertTimeFormat(dateTime):
 def getSeptEntry():
     page = requests.get('http://www.concordia.ca/encs/computer-science-software-engineering/students/course-sequences/sept-soen-general.html')
     response = page.text
-    removeListRows = ['Year','<th>', 'Â']
+    removeListRows = ['Year','<th>', 'Ã‚']
     
     htmlEntities = BeautifulSoup(response)
     generalCourses = htmlEntities.find_all("div", {"class" : "accordion-panel section"})
@@ -69,6 +69,7 @@ def getFallWinter(sequenceDict):
     course = []
     prerequisitesToRemove = ['CWTC','BCEE','BLDG','CIVI','COEN','MECH','INDU','IADI']
     allowedCourses = ['ENGR','COMP','ENCS 282','ELEC 275','SOEN']
+    multiSemesterCourses = [['SOEN 490',None]]
     while hasNext == True:
         try:
             endTest = tag.text # check if there are more tags to parse
@@ -110,6 +111,7 @@ def getFallWinter(sequenceDict):
             del(sequenceDict[courseID])
         else:
             sequenceNumber = -1
+            
         courseInformationMasterList[courseID] = {'Title': courseDescription,'Credits' : courseCreditAmount,'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {}, 'SemesterInSequence' : sequenceNumber}
         currentCourseLocation = 1
 
@@ -195,11 +197,31 @@ def getFallWinter(sequenceDict):
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass] = []
                     courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
                 currentEntry += 1
+                
+        for course in multiSemesterCourses:
+            if courseID == course[0]:
+                course[1] = courseInformationMasterList[courseID].copy()
+                
     for speacialCourse in sequenceDict.keys():
-        courseInformationMasterList[speacialCourse] = {'Title': "",'Credits' : "",'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {}, 'SemesterInSequence' : sequenceDict[speacialCourse]}
+        for course in multiSemesterCourses:
+            if course[0] + "(" in speacialCourse:
+                courseInformationMasterList[speacialCourse] = course[1]
+                courseInformationMasterList[speacialCourse]["SemesterInSequence"] = sequenceDict[speacialCourse]
+                
+        if speacialCourse not in courseInformationMasterList.keys():
+            courseInformationMasterList[speacialCourse] = {'Title': "",'Credits' : "",'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {"Fall":{"Lecture":[],"Location":{"Building":"","Room":""}},"Winter":{"Lecture":[],"Location":{"Building":"","Room":""}}}, 'SemesterInSequence' : sequenceDict[speacialCourse]}
         
     with open('JSONdata.txt', 'w') as outfile:
-      json.dump(courseInformationMasterList, outfile)
+        json.dump(courseInformationMasterList, outfile)
+        outfile.flush()
+        outfile.close()
+    test = open('JSONdata.txt', 'r')
+    temp = json.load(test)
+    test.close()
+    with open('JSONdata.txt', 'w') as outfile:
+        json.dump(temp, outfile)
+        outfile.flush()
+        outfile.close()
 
 def getSeptSequence():
     link = 'http://www.concordia.ca/encs/computer-science-software-engineering/students/course-sequences/sept-soen-general.html'
@@ -211,7 +233,9 @@ def getSeptSequence():
     divs = htmlEntities.find_all("div", {'class' : 'concordia-table'})
     
     heading = divs[0].find_all("tr")[1].find_all(text=True)
-    heading = {heading[0]:'',heading[2]:'',heading[4]:'','SemesterInSequence': 0}
+    heading = {heading[0]:'',heading[2]:'',heading[4]:'','semesterNumber': 0}
+
+    duplicatesList = {}
 
     sequenceDict = {}
     semesterNumber = 0
@@ -240,8 +264,10 @@ def getSeptSequence():
             if 'td' in element.name and len(text) > 3:
                 if output not in sequenceDict.keys():
                     sequenceDict[output] = semesterNumber
+                    duplicatesList[output] = 2
                 else:
-                    sequenceDict[output+str(semesterNumber)] = semesterNumber
+                    sequenceDict[output+ "(" + str(duplicatesList[output]) + ")"] = semesterNumber
+                    duplicatesList[output] += 1
                 skipCount = 2 
     
             if 'Course Number' in output:
@@ -262,6 +288,6 @@ def getSeptSequence():
       #json.dump(sequenceDict, outfile)
     return sequenceDict
 
-      
+start = time()      
 getFallWinter(getSeptSequence())
-
+print "Execution time: " + str((time() - start)/60) + " Minutes."

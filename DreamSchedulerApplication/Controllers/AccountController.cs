@@ -94,14 +94,14 @@ namespace DreamSchedulerApplication.Controllers
                 var encryptedPassword = PasswordHash.CreateHash(model.Password);
                 var newUser = new User { Username = model.Username, Password = encryptedPassword, Roles = "student" };
 
-                var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, GPA = model.GPA };
+                var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, Entry = model.Entry, GPA = model.GPA };
                 //MATCH (u:User {Username:'admin'}) SET u.Roles = 'admin'
                 // create the account in the database
                 try
                 {
                     client.Cypher
-                                .Create("(u:User {newAccount})-[:IsA]->(s:Student {newStudent})")
-                                .WithParam("newAccount", newUser)
+                                .Create("(u:User {newUser})-[:IsA]->(s:Student {newStudent})")
+                                .WithParam("newUser", newUser)
                                 .WithParam("newStudent", newStudent)
                                 .ExecuteWithoutResults();
                 }
@@ -111,6 +111,13 @@ namespace DreamSchedulerApplication.Controllers
                     else if (exception.Message.Contains("StudentID")) { ModelState.AddModelError("", "Student with such student ID number already exists"); return View("Register"); }
                     else throw exception;
                 }
+
+                //Create HasToComplete relationship between student and all courses
+               /* client.Cypher
+                                .Match("(u:User)-[:IsA]->(s:Student), (c:Course)")
+                                .Where((User u) => u.Username == newUser.Username)
+                                .Create("(s)-[:HasToComplete]->(c)")
+                                .ExecuteWithoutResults();*/
 
                 //Create new session
                 FormsAuthentication.SetAuthCookie(newUser.Username, false);

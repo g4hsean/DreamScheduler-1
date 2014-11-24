@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using System.IO;
 using Neo4jClient;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Text;
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -127,12 +129,11 @@ namespace DreamSchedulerApplication.Controllers
             p.StartInfo.UseShellExecute = false;
             p.Start();
             p.WaitForExit();
-
+            
 
             //Import JSON objects containing course data from JSONdata.txt 
             StreamReader reader = System.IO.File.OpenText(@"c:/Python27/JSONdata.txt");
             JObject courseFile = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-
 
             //Get all courses
             var courses = courseFile.Children();
@@ -181,11 +182,11 @@ namespace DreamSchedulerApplication.Controllers
                            
                            foreach (var lecture in lectures)
                            {
-                               var dates = lecture.ElementAt(2);
+                               var dates = lecture.ElementAt(0);
                                var location = lecture.ElementAt(3);
                                var newLecture = new Course.Lecture
                                {
-                                   Professor = (string)((Newtonsoft.Json.Linq.JProperty)(lecture.ElementAt(0))).Value,
+                                   Professor = (string)((Newtonsoft.Json.Linq.JProperty)(lecture.ElementAt(2))).Value,
                                    Section = (string)((Newtonsoft.Json.Linq.JProperty)(lecture.ElementAt(1))).Value,
                                    Days = ((Newtonsoft.Json.Linq.JArray)((dates.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>(),
                                    StartTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(1))).Value,

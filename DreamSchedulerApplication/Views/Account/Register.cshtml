@@ -53,6 +53,13 @@
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(m => m.Entry, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Entry,
+            new SelectList(DreamSchedulerApplication.Models.RegisterViewModel.EntryOptions))
+        </div>
+    </div>
+    <div class="form-group">
         @Html.LabelFor(m => m.GPA, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.TextBoxFor(m => m.GPA, new { @class = "form-control" })
