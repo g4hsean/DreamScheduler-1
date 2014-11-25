@@ -99,8 +99,6 @@ namespace DreamSchedulerApplication.Controllers
             }
         }
 
-
-
         public ActionResult DatabaseUpdate()
         {
 
@@ -108,16 +106,16 @@ namespace DreamSchedulerApplication.Controllers
             //Create new Database nodes with timestamps
             //Only for creating new database, has to be modified to support updating
 
-            string time = DateTime.Now.ToString("yyyy-MM-ddThh:mm:sszzz");
-            var newDatabase = new Database { DatabaseName = "DreamScheduler", lastUpdate = time };
+            //string time = DateTime.Now.ToString("yyyy-MM-ddThh:mm:sszzz");
+            //var newDatabase = new Database { DatabaseName = "DreamScheduler", lastUpdate = time };
 
-            client.Cypher
-                .Create("(n:Database {newDatabase})")
-                .WithParam("newDatabase", newDatabase)
-                .ExecuteWithoutResults();
+            //client.Cypher
+             //   .Create("(n:Database {newDatabase})")
+              //  .WithParam("newDatabase", newDatabase)
+              //  .ExecuteWithoutResults();
 
-          
-          
+
+
             //Execute  scrapper.py to create JSON files with scraped data
             //scrapper.py file must be in the python27 folder
 
@@ -129,165 +127,139 @@ namespace DreamSchedulerApplication.Controllers
             p.StartInfo.UseShellExecute = false;
             p.Start();
             p.WaitForExit();
-            
 
-            //Import JSON objects containing course data from JSONdata.txt 
-            StreamReader reader = System.IO.File.OpenText(@"c:/Python27/JSONdata.txt");
-            JObject courseFile = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
 
-            //Get all courses
-            var courses = courseFile.Children();
-            foreach (var course in courses)
+            //Import JSON objects containing course data from JSONdata.txt
+            using (StreamReader reader = System.IO.File.OpenText(@"c:/Python27/JSONdata.txt"))
             {
-                var prerequisites = ((Newtonsoft.Json.Linq.JArray)((course.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>();
-                //Create new course model object, load it with the JSON data and save it to database
-                var newCourse = course.First.ToObject<Course>();
-                newCourse.Code = ((Newtonsoft.Json.Linq.JProperty)course).Name;
+                JObject courseFile = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
 
-                if (newCourse.SemesterInSequence == -1) continue; //ignore courses that are not in the sequence
-
-                client.Cypher
-                           .Create("(u:Course {newCourse})")
-                           .WithParam("newCourse", newCourse)
-                           .ExecuteWithoutResults();
-
-                //Load semester data
-                var semesters = course.ElementAt(0).ElementAt(4).ElementAt(0);
-                foreach(var semester in semesters)
+                //Get all courses
+                var courses = courseFile.Children();
+                foreach (JProperty course in courses)
                 {
+                    //Create new course model object, load it with the JSON data and save it to database
                     
-                   var semesterNode = new Course.Semester
-                   {
-                       Name = ((Newtonsoft.Json.Linq.JProperty)(semester)).Name
-                   };
+                    var newCourse = course.Value.ToObject<Course>();
+                    newCourse.Code = course.Name;
 
-                   //Create semester node and relationship to the course
-                   client.Cypher
-                                  .Match("(n:Course )")
-                                  .Where((Course n) => n.Code == newCourse.Code)
-                                  .Create("n-[:has]->(u:Semester {newSemester})")
-                                  .WithParam("newSemester", semesterNode)
-                                  .ExecuteWithoutResults();
+                    if (newCourse.SemesterInSequence == -1) continue; //ignore courses that are not in the sequence
 
-                   //Load lectures, tutorials and labs
-                   var properties = ((Newtonsoft.Json.Linq.JContainer)(semester)).ElementAt(0);
-                   
-                   foreach(var property in properties)
-                   {
-                       var propertyName = ((Newtonsoft.Json.Linq.JProperty)(property)).Name;
+                    client.Cypher
+                                .Create("(u:Course {newCourse})")
+                                .WithParam("newCourse", newCourse)
+                                .ExecuteWithoutResults();
 
-                       if(propertyName == "Lecture")
-                       {
-                           var lectures = property.ElementAt(0);
-                           
-                           foreach (var lecture in lectures)
-                           {
-                               var dates = lecture.ElementAt(0);
-                               var location = lecture.ElementAt(3);
-                               var newLecture = new Course.Lecture
-                               {
-                                   Professor = (string)((Newtonsoft.Json.Linq.JProperty)(lecture.ElementAt(2))).Value,
-                                   Section = (string)((Newtonsoft.Json.Linq.JProperty)(lecture.ElementAt(1))).Value,
-                                   Days = ((Newtonsoft.Json.Linq.JArray)((dates.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>(),
-                                   StartTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(1))).Value,
-                                   EndTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(0))).Value,                                 
-                                   Building = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(0))).Value,
-                                   Room = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(1))).Value
-                               };
-                             
-                               //create lecture node -- create relationship to the semester node 
-                               client.Cypher
-                                       .Match("(n:Course)-[has]->(s:Semester)")
+                    //Load semester data
+                    JToken semesters = course.Value["Course Dates"];
+
+                    foreach (JProperty semester in semesters)
+                    {
+
+                        var newSemester = new Course.Semester { Name = semester.Name };
+
+                        //Create semester node and relationship to the course
+                        client.Cypher
+                                       .Match("(n:Course )")
                                        .Where((Course n) => n.Code == newCourse.Code)
-                                       .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
-                                       .Create("s-[:has]->(l:Lecture {newLecture})")
-                                       .WithParam("newLecture", newLecture)
+                                       .Create("n-[:has]->(u:Semester {newSemester})")
+                                       .WithParam("newSemester", newSemester)
                                        .ExecuteWithoutResults();
-                           }
-                       }
 
-                       else if(propertyName == "Lab")
-                       {
-                            var labs = property.ElementAt(0);
+                        //Load lectures, tutorials and labs
+                        var lectures = semester.Value["Lecture"];
+                        foreach (var lecture in lectures)
+                        {
+                            var newLecture = lecture.ToObject<Course.Lecture>();
+
+                            newLecture.StartTime = (string) lecture["Dates"]["Start-Time"];
+                            newLecture.EndTime = (string) lecture["Dates"]["End-Time"];
+                            newLecture.Days = lecture["Dates"]["Days"].ToObject<string []>();
+                            newLecture.Building = (string) lecture["Location"]["Building"];
+                            newLecture.Room = (string) lecture["Location"]["Room"];
+
+                            client.Cypher
+                                            .Match("(n:Course)-[has]->(s:Semester)")
+                                            .Where((Course n) => n.Code == newCourse.Code)
+                                            .AndWhere((Course.Semester s) => s.Name == newSemester.Name)
+                                            .Create("s-[:has]->(l:Lecture {newLecture})")
+                                            .WithParam("newLecture", newLecture)
+                                            .ExecuteWithoutResults();
+                        }
+
+                        var tutorials = semester.Value["Tutorial"];
+                        if(tutorials != null)
+                        {
+                            foreach (var tutorial in tutorials)
+                            {
+                                var newTutorial = tutorial.ToObject<Course.Tutorial>();
+
+                                newTutorial.StartTime = (string)tutorial["Dates"]["Start-Time"];
+                                newTutorial.EndTime = (string)tutorial["Dates"]["End-Time"];
+                                newTutorial.Days = tutorial["Dates"]["Days"].ToObject<string[]>();
+                                newTutorial.Building = (string)tutorial["Location"]["Building"];
+                                newTutorial.Room = (string)tutorial["Location"]["Room"];
+                                int j = 0;
+
+                                client.Cypher
+                                            .Match("(n:Course)-[has]->(s:Semester)")
+                                            .Where((Course n) => n.Code == newCourse.Code)
+                                            .AndWhere((Course.Semester s) => s.Name == newSemester.Name)
+                                            .Create("s-[:has]->(l:Tutorial {newTutorial})")
+                                            .WithParam("newTutorial", newTutorial)
+                                            .ExecuteWithoutResults();
+
+                            }
+                        }
+
+                        var labs = semester.Value["Lab"];
+                        if (labs != null)
+                        {
                             foreach (var lab in labs)
                             {
-                                var dates = lab.ElementAt(1);
-                                var location = lab.ElementAt(2);
-                                var newLab = new Course.Lab
-                                {
-                                    Section = (string)((Newtonsoft.Json.Linq.JProperty)(lab.ElementAt(0))).Value,
-                                    Days = ((Newtonsoft.Json.Linq.JArray)((dates.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>(),
-                                    StartTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(1))).Value,
-                                    EndTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(0))).Value,
-                                    Building = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(0))).Value,
-                                    Room = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(1))).Value
-                                };                      
+                                var newLab = lab.ToObject<Course.Tutorial>();
 
-                                //create Tutorial node -- create relation to the semester 
+                                newLab.StartTime = (string)lab["Dates"]["Start-Time"];
+                                newLab.EndTime = (string)lab["Dates"]["End-Time"];
+                                newLab.Days = lab["Dates"]["Days"].ToObject<string[]>();
+                                newLab.Building = (string)lab["Location"]["Building"];
+                                newLab.Room = (string)lab["Location"]["Room"];
+                                int j = 0;
+
                                 client.Cypher
-                                        .Match("(n:Course)-[has]->(s:Semester)")
-                                        .Where((Course n) => n.Code == newCourse.Code)
-                                        .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
-                                        .Create("s-[:has]->(l:Lab {newLab})")
-                                        .WithParam("newLab", newLab)
-                                        .ExecuteWithoutResults();
+                                            .Match("(n:Course)-[has]->(s:Semester)")
+                                            .Where((Course n) => n.Code == newCourse.Code)
+                                            .AndWhere((Course.Semester s) => s.Name == newSemester.Name)
+                                            .Create("s-[:has]->(l:Lab {newLab})")
+                                            .WithParam("newLab", newLab)
+                                            .ExecuteWithoutResults();
                             }
-                       }
-
-                       else if(propertyName == "Tutorial")
-                       {
-                           var tutorials = property.ElementAt(0);
-                           foreach (var tutorial in tutorials)
-                           {
-                               var dates = tutorial.ElementAt(1);
-                               var location = tutorial.ElementAt(2);
-
-                               var newTutorial = new Course.Tutorial
-                               {
-                                   Section = (string)((Newtonsoft.Json.Linq.JProperty)(tutorial.ElementAt(0))).Value,
-                                   Days = ((Newtonsoft.Json.Linq.JArray)((dates.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>(),
-                                   StartTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(1))).Value,
-                                   EndTime = (string)((Newtonsoft.Json.Linq.JProperty)(dates.ElementAt(0).ElementAt(0))).Value,
-                                   Building = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(0))).Value,
-                                   Room = (string)((Newtonsoft.Json.Linq.JProperty)(location.ElementAt(0).ElementAt(1))).Value
-                               };
-
-                               //create Tutorial node -- create relation to the semester 
-                               client.Cypher
-                                       .Match("(n:Course)-[has]->(s:Semester)")
-                                       .Where((Course n) => n.Code == newCourse.Code)
-                                       .AndWhere((Course.Semester s) => s.Name == semesterNode.Name)
-                                       .Create("s-[:has]->(l:Tutorial {newTutorial})")
-                                       .WithParam("newTutorial", newTutorial)
-                                       .ExecuteWithoutResults();
-                           }
-                       }
-                   }   
+                        }
+                        
+                    }
                 }
-            }
 
-            foreach (var course in courses)
-            {
-                var courseCode = ((Newtonsoft.Json.Linq.JProperty)course).Name;
-                //var prerequisites = (string)((Newtonsoft.Json.Linq.JProperty)(course.ElementAt(0).ElementAt(0))).Value;
-
-                var prerequisites = ((Newtonsoft.Json.Linq.JArray)((course.ElementAt(0).ElementAt(2)).First)).ToObject<string[]>();
-                
-                foreach(var prerequisite in prerequisites)
+                foreach (JProperty course in courses)
                 {
-                    client.Cypher
-                                       .Match("(c1:Course)", "(c2:Course)")
-                                       .Where((Course c1) => c1.Code == prerequisite)
-                                       .AndWhere((Course c2) => c2.Code == courseCode)
-                                       .Create("(c1)-[:PrerequisiteFor]->(c2)")
-                                       .ExecuteWithoutResults();
-                }
+                    var courseCode = course.Name;
 
+                    var prerequisites = course.Value["Prerequisites"].ToObject<string[]>();
+
+                    foreach (var prerequisite in prerequisites)
+                    {
+                        client.Cypher
+                                           .Match("(c1:Course)", "(c2:Course)")
+                                           .Where((Course c1) => c1.Code == prerequisite)
+                                           .AndWhere((Course c2) => c2.Code == courseCode)
+                                           .Create("(c1)-[:PrerequisiteFor]->(c2)")
+                                           .ExecuteWithoutResults();
+                    }
+
+                }
             }
 
             return RedirectToAction("Index");
         }
-
 
         //working 
         public ActionResult JsonProfessors()
