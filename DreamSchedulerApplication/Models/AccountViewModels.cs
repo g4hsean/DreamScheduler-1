@@ -58,4 +58,5 @@ namespace DreamSchedulerApplication.Models
         [Display(Name = "GPA")]
         public int GPA { get; set; }
     }
+
 }

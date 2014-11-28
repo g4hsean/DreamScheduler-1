@@ -199,7 +199,6 @@ namespace DreamSchedulerApplication.Controllers
                                 newTutorial.Days = tutorial["Dates"]["Days"].ToObject<string[]>();
                                 newTutorial.Building = (string)tutorial["Location"]["Building"];
                                 newTutorial.Room = (string)tutorial["Location"]["Room"];
-                                int j = 0;
 
                                 client.Cypher
                                             .Match("(n:Course)-[has]->(s:Semester)")
@@ -224,7 +223,6 @@ namespace DreamSchedulerApplication.Controllers
                                 newLab.Days = lab["Dates"]["Days"].ToObject<string[]>();
                                 newLab.Building = (string)lab["Location"]["Building"];
                                 newLab.Room = (string)lab["Location"]["Room"];
-                                int j = 0;
 
                                 client.Cypher
                                             .Match("(n:Course)-[has]->(s:Semester)")

@@ -1,0 +1,49 @@
+﻿@model System.Collections.Generic.List<DreamSchedulerApplication.Models.Constraint>
+
+@{
+    ViewBag.Title = "Constraints";
+}
+
+<h2>Constraints</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+
+        <table id="container">
+            <tr>
+                <th>Semester</th>
+                <th>Number of Courses
+                </th>
+            </tr>
+            @Html.EditorForModel()
+        </table>  
+         
+        <br />
+        <a href="" id="btnAdd">Add Semester</a>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" style="margin-top: 40px" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#btnAdd").click(function (e) {
+                var itemIndex = $("#container .listElement").length;
+                var semester = +$("#container tr:last-of-type .listElement input").val() + 1;
+                e.preventDefault();
+                var newItem = $("<tr><td class='listElement'><input type='text' id='" + itemIndex + "__Semester' name='[" + itemIndex + "].Semester'/ value='" + semester + "' readonly='readonly'></td><td><input type='text'  id='" + itemIndex + "__NumberOfCourses' name='[" + itemIndex + "].NumberOfCourses' /></tr>");
+                $("#container").append(newItem);
+            });
+        });
+    </script>
+}

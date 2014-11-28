@@ -7,7 +7,7 @@ namespace DreamSchedulerApplication.Models
 {
     public class Sequence
     {
-        public List<CourseEntry> SequenceList { get; set; }
+        public List<CourseEntry> CourseList { get; set; }
 
         public class CourseEntry
         {

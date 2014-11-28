@@ -1,0 +1,11 @@
+﻿@model DreamSchedulerApplication.Models.Constraint
+
+
+    <tr>
+        <td class='listElement'>
+            @Html.TextBoxFor(x => x.Semester, new { @readonly="readonly" })
+        </td> 
+        <td>
+            @Html.TextBoxFor(x => x.NumberOfCourses)
+        </td>
+    </tr>

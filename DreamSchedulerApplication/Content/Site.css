@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+table#container {
+    table-layout: fixed;
+}
+
+table#container td, th{
+    width: 120px;
+}
