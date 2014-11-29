@@ -28,13 +28,18 @@ namespace DreamSchedulerApplication.Controllers
 
         public ActionResult GenerateDefaultSequence()
         {
-            return View(defaultSequenceGenerator.GenerateDefaultSequence());
+            return View("DefaultCourseSequence", defaultSequenceGenerator.GenerateDefaultSequence());
+        }
+
+        public ActionResult ViewDefaultSequence()
+        {
+            return View("DefaultCourseSequence", defaultSequenceGenerator.ViewDefaultSequence());
         }
 
 
         public ActionResult GenerateStudentSequence(List<Constraint> constraints)
         {
-            return View("GenerateSchedule", studentSequenceGenerator.GenerateStudentSequence(constraints));
+            return View("StudentCourseSequence", studentSequenceGenerator.GenerateStudentSequence(constraints));
         }
 
         public ActionResult ResetCustomSequence()
@@ -46,7 +51,7 @@ namespace DreamSchedulerApplication.Controllers
         public ActionResult Constraints()
         {
             var sequence = studentSequenceGenerator.getStudentSequence();
-            if (sequence.Count() != 0) return View("GenerateSchedule", sequence);
+            if (sequence.Count() != 0) return View("StudentCourseSequence", sequence);
 
             var previousSemesters = client.Cypher
                          .Match("(u:User)-->(:Student)-[r:Completed]->(:Course)")
@@ -67,6 +72,8 @@ namespace DreamSchedulerApplication.Controllers
         [HttpPost]
         public ActionResult Constraints(List<Constraint> constraints)
         {
+            if (!ModelState.IsValid) return View(constraints);
+        
             return GenerateStudentSequence(constraints);
         }
 

@@ -243,6 +243,41 @@ namespace DreamSchedulerApplication.Models
             return sequence.CourseList;
         }
 
+        public List<Sequence.CourseEntry> ViewDefaultSequence()
+        {
+            //Create new sequence
+            var sequence = new Sequence();
+            sequence.CourseList = new List<Sequence.CourseEntry>();
+
+            var currentStudent = getCurrentStudent();
+
+            //Get all courses
+            List<Course> unscheduledCourses = getUnscheduledCourses(currentStudent);
+
+            //Schedule courses for each semester
+            for (int semester = 1; unscheduledCourses.Count() != 0; semester++)
+            {
+                var semesterName = getSemesterName(currentStudent, semester);
+
+                //Schedule up to 5 courses for each semester
+                for (int coursesToSchedule = 5; coursesToSchedule > 0; coursesToSchedule--)
+                {
+                    foreach (var course in unscheduledCourses)
+                    {
+                        scheduleCourse(course, semester, semesterName, sequence);
+
+                        //Remove scheduled course from unscheduled courses
+                        unscheduledCourses.Remove(course);
+
+                        //Schedule next course
+                        break;
+                    }
+                }
+            }
+
+            return sequence.CourseList;
+        }
+
         protected override List<Course> getUnscheduledCourses(Student currentStudent)
         {
             return client.Cypher
@@ -297,10 +332,12 @@ namespace DreamSchedulerApplication.Models
 
     public class Constraint
     {
-        [Display(Name = "Semester")]
+        [Display(Name = "Semester")]    
         public int Semester { get; set; }
 
         [Display(Name = "Number of courses")]
+        [Required(ErrorMessage = "Number of courses you want to take is required")]
+        [Range(0, 6, ErrorMessage = "Number of courses must be between 0 and 6")] 
         public int NumberOfCourses { get; set; }
     }
 }

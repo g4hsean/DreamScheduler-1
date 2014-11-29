@@ -239,11 +239,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Admin\JsonProfessors.cshtml" />
     <Content Include="Views\Student\CourseSequence.cshtml" />
-    <Content Include="Views\SequenceGenerator\GenerateDefaultSequence.cshtml" />
-    <Content Include="Views\SequenceGenerator\GenerateSchedule.cshtml" />
     <Content Include="Views\SequenceGenerator\Constraints.cshtml" />
-    <Content Include="Views\SequenceGenerator\backup.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Constraint.cshtml" />
+    <Content Include="Views\SequenceGenerator\DefaultCourseSequence.cshtml" />
+    <Content Include="Views\SequenceGenerator\StudentCourseSequence.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

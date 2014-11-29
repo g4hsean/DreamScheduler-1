@@ -64,13 +64,21 @@ namespace DreamSchedulerApplication.Controllers
             if (ModelState.IsValid)
             {   //(u:User)-[]->(s:Student)
                 //Add course
-                client.Cypher
-                .Match("(c:Course), (u:User)-[]->(s:Student)")
-                .Where((Course c) => c.Code == courseEntry.Course.Code)
-                .AndWhere((User u) => u.Username == HttpContext.User.Identity.Name)
-                .Create("(s)-[r:Completed {completed}]->(c)")
-                .WithParam("completed", courseEntry.Completed)
-                .ExecuteWithoutResults();
+                var course = client.Cypher
+                                            .Match("(c:Course), (u:User)-->(s:Student)")
+                                            .Where((Course c) => c.Code == courseEntry.Course.Code)
+                                            .AndWhere((User u) => u.Username == HttpContext.User.Identity.Name)
+                                            .AndWhere("NOT (s)-[:Completed]->(c)")
+                                            .Create("(s)-[r:Completed {completed}]->(c)")
+                                            .WithParam("completed", courseEntry.Completed)
+                                            .Return(c => c.As<Course>())
+                                            .Results;
+
+                if (course.Count() == 0)
+                {
+                    ModelState.AddModelError("", "Course does not exists or already has been added to the academic record");
+                    return View(courseEntry);
+                }
 
                 return RedirectToAction("Index");
             }

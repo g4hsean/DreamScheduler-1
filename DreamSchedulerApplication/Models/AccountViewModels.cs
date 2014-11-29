@@ -45,6 +45,7 @@ namespace DreamSchedulerApplication.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Your student ID is required")]
+        [RegularExpression(@"^\d{7}(?:\d{1})?$", ErrorMessage = "Invalid Student ID")]
         [Display(Name = "Student ID")]
         public int StudentID { get; set; }
 

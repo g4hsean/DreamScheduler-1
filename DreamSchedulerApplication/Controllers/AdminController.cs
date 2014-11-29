@@ -114,7 +114,11 @@ namespace DreamSchedulerApplication.Controllers
               //  .WithParam("newDatabase", newDatabase)
               //  .ExecuteWithoutResults();
 
-
+            //Remove all courses
+            client.Cypher
+                            .Match("(c:Course), (c1:Course)-[r]-()")
+                            .Delete("r, c")
+                            .ExecuteWithoutResults();
 
             //Execute  scrapper.py to create JSON files with scraped data
             //scrapper.py file must be in the python27 folder

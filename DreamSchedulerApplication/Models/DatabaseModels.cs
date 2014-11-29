@@ -33,7 +33,10 @@ namespace DreamSchedulerApplication.Models
 
     public class Course
     {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Course Code is required")] 
+        [RegularExpression(@"\b[A-Z]{4}\b\s\b[0-9]{3}\b", ErrorMessage = "Invalid Course Code")]
         public string Code { get; set; }
+
         public string Credits { get; set; }
         public string Title { get; set; }
         public int SemesterInSequence { get; set; }
@@ -76,7 +79,12 @@ namespace DreamSchedulerApplication.Models
     //Relationship classes
     public class Completed
     {
+        [Required(ErrorMessage = "Your grade is required")]
+        [RegularExpression(@"^[A-F][+-]?$", ErrorMessage = "Invalid Grade")]       
         public string Grade { get; set; }
+
+        [Required(ErrorMessage = "Semester is required")]
+        [Range(0, 20, ErrorMessage = "Invalid semester number")]
         public int Semester { get; set; }
     }
 
