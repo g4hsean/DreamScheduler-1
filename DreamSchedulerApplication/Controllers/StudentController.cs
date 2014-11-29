@@ -35,9 +35,12 @@ namespace DreamSchedulerApplication.Controllers
         }
 
         //GET: Student/CourseDetails
-        public ActionResult CourseDetails(string code)
+        public ActionResult CourseDetails(string code, string semesterName)
         {
             var courseDetails = new CourseDetails();
+
+            if (semesterName.Contains("Fall")) semesterName = "Fall";
+            else semesterName = "Winter";
 
             courseDetails.Course = client.Cypher
                                   .Match("(c:Course)")
@@ -45,23 +48,38 @@ namespace DreamSchedulerApplication.Controllers
                                   .Return(c => c.As<Course>())
                                   .Results.First();
 
-            courseDetails.Lectures = client.Cypher
-                                  .Match("(c:Course)-->(:Semester)-->(l:Lecture)")
+            var lectures = client.Cypher
+                                  .Match("(c:Course)-->(s:Semester)-->(l:Lecture)")
                                   .Where((Course c) => c.Code == code)
+                                  .AndWhere((Course.Semester s) => s.Name == semesterName)
                                   .Return(l => l.As<Course.Lecture>())
                                   .Results;
 
-            courseDetails.Labs = client.Cypher
-                                  .Match("(c:Course)-->(:Semester)-->(l:Lab)")
-                                  .Where((Course c) => c.Code == code)
-                                  .Return(l => l.As<Course.Lab>())
-                                  .Results;
+            foreach (var lecture in lectures)
+            {
+                var currentSection = lecture.Section;
 
-            courseDetails.Tutorials = client.Cypher
-                                  .Match("(c:Course)-->(:Semester)-->(t:Tutorial)")
-                                  .Where((Course c) => c.Code == code)
-                                  .Return(t => t.As<Course.Tutorial>())
-                                  .Results;
+                var labs = client.Cypher
+                                      .Match("(c:Course)-->(s:Semester)-->(l:Lab)")
+                                      .Where((Course c) => c.Code == code)
+                                      .AndWhere((Course.Semester s) => s.Name == semesterName)
+                                      .Return(l => l.As<Course.Lab>())
+                                      .Results;
+
+                labs = labs.Where(lab => lab.Section[0] == currentSection[0]);
+
+                var tutorials = client.Cypher
+                                      .Match("(c:Course)-->(s:Semester)-->(t:Tutorial)")
+                                      .Where((Course c) => c.Code == code)
+                                      .AndWhere((Course.Semester s) => s.Name == semesterName)
+                                      .Return(t => t.As<Course.Tutorial>())
+                                      .Results;
+
+                tutorials = tutorials.Where(tutorial => tutorial.Section[0] == currentSection[0]);
+
+                var section = new CourseDetails.Section() { Lecture = lecture, Labs = labs, Tutorials = tutorials };
+                courseDetails.sections.Add(section);              
+            }
         
             return View(courseDetails);
         }

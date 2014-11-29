@@ -343,10 +343,21 @@ namespace DreamSchedulerApplication.Models
 
     public class CourseDetails
     {
+
+        public CourseDetails()
+        {
+            sections = new List<CourseDetails.Section>();
+        }
         public Course Course {get; set;}
-        public IEnumerable<Course.Lecture> Lectures { get; set; }
-        public IEnumerable<Course.Lab> Labs { get; set; }
-        public IEnumerable<Course.Tutorial> Tutorials { get; set; }
+
+        public IList<CourseDetails.Section> sections;
+
+        public class Section
+        {
+            public Course.Lecture Lecture { get; set; }
+            public IEnumerable<Course.Lab> Labs { get; set; }
+            public IEnumerable<Course.Tutorial> Tutorials { get; set; }
+        }
     }
 
     public class Constraint
