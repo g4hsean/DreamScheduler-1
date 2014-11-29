@@ -19,7 +19,6 @@ namespace DreamSchedulerApplication.Models
 
     public class RegisterViewModel
     {
-        //"The {0} must be at least {2} characters long.", MinimumLength = 5
         [Required(ErrorMessage = "Username is required")]
         [StringLength(100, ErrorMessage = "The {0} must be between {2} and  {1} characters long.", MinimumLength = 5)]
         [Display(Name = "Username")]
@@ -58,6 +57,33 @@ namespace DreamSchedulerApplication.Models
         [Required(ErrorMessage = "Your GPA is required")]
         [Display(Name = "GPA")]
         public int GPA { get; set; }
+    }
+
+    public class RequestAdminAccountViewModel
+    {
+        [Required(ErrorMessage = "Username is required")]
+        [StringLength(100, ErrorMessage = "The {0} must be between {2} and  {1} characters long.", MinimumLength = 5)]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be between {2} and  {1} characters long.", MinimumLength = 5)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Your first name is required")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Your last name is required")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
     }
 
 }

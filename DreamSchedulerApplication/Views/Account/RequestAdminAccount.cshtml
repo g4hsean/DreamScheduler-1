@@ -1,7 +1,7 @@
-﻿@model DreamSchedulerApplication.Models.RegisterViewModel
+﻿@model DreamSchedulerApplication.Models.RequestAdminAccountViewModel
 
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Request Admin Account";
 }
 
 <h2>@ViewBag.Title.</h2>
@@ -10,7 +10,7 @@
 
 
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("RequestAdminAccount", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
@@ -47,28 +47,11 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.StudentID, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.StudentID, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Entry, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(m => m.Entry,
-            new SelectList(DreamSchedulerApplication.Models.RegisterViewModel.EntryOptions))
-        </div>
-    </div>
-    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-primary" value="Register" />
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Request Admin Account", "RequestAdminAccount")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

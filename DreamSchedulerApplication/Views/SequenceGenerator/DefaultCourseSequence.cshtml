@@ -27,6 +27,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Course.Code)
             </td>
+            <td>
+                @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item.Course.Code }, null)
+            </td>
         </tr>
     }
 

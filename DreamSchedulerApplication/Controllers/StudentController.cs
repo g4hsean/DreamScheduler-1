@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using DreamSchedulerApplication.Models;
 using Neo4jClient;
+using System.Linq;
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -21,18 +22,6 @@ namespace DreamSchedulerApplication.Controllers
             return View();
         }
 
-        //GET: Student/CourseSequence
-        public ActionResult CourseSequence()
-        {
-            IEnumerable<Course> courseSequence = client.Cypher
-                         .Match("(c:Course)")
-                         .Return(c => c.As<Course>())
-                         .OrderBy("c.SemesterInSequence")
-                         .Results;
-
-            return View(courseSequence);
-        }
-
         //GET: Student/Professors
         public ActionResult Professors()
         {
@@ -43,6 +32,38 @@ namespace DreamSchedulerApplication.Controllers
                                   .Results;
 
             return View(professorsList);
+        }
+
+        //GET: Student/CourseDetails
+        public ActionResult CourseDetails(string code)
+        {
+            var courseDetails = new CourseDetails();
+
+            courseDetails.Course = client.Cypher
+                                  .Match("(c:Course)")
+                                  .Where((Course c) => c.Code == code)
+                                  .Return(c => c.As<Course>())
+                                  .Results.First();
+
+            courseDetails.Lectures = client.Cypher
+                                  .Match("(c:Course)-->(:Semester)-->(l:Lecture)")
+                                  .Where((Course c) => c.Code == code)
+                                  .Return(l => l.As<Course.Lecture>())
+                                  .Results;
+
+            courseDetails.Labs = client.Cypher
+                                  .Match("(c:Course)-->(:Semester)-->(l:Lab)")
+                                  .Where((Course c) => c.Code == code)
+                                  .Return(l => l.As<Course.Lab>())
+                                  .Results;
+
+            courseDetails.Tutorials = client.Cypher
+                                  .Match("(c:Course)-->(:Semester)-->(t:Tutorial)")
+                                  .Where((Course c) => c.Code == code)
+                                  .Return(t => t.As<Course.Tutorial>())
+                                  .Results;
+        
+            return View(courseDetails);
         }
 
     }

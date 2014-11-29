@@ -329,6 +329,25 @@ namespace DreamSchedulerApplication.Models
         }
     }
 
+    public class Sequence
+    {
+        public List<CourseEntry> CourseList { get; set; }
+
+        public class CourseEntry
+        {
+            public Course Course { get; set; }
+            public int Semester { get; set; }
+            public string SemesterName { get; set; }
+        }
+    }
+
+    public class CourseDetails
+    {
+        public Course Course {get; set;}
+        public IEnumerable<Course.Lecture> Lectures { get; set; }
+        public IEnumerable<Course.Lab> Labs { get; set; }
+        public IEnumerable<Course.Tutorial> Tutorials { get; set; }
+    }
 
     public class Constraint
     {

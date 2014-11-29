@@ -17,13 +17,29 @@ namespace DreamSchedulerApplication.Models
 
     public class Student
     {
-
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [Display(Name = "Student ID")]
+        [RegularExpression(@"^\d{7}(?:\d{1})?$", ErrorMessage = "Invalid Student ID")]
         public int StudentID { get; set; }
+
         public string Entry  { get; set; }
         public int GPA { get; set; }
     }
+
+    public class Admin
+    {
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+    }
+
 
     public class Database
     {

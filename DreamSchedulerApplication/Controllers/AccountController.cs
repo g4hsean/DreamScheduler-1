@@ -5,8 +5,6 @@ using System.Web.Mvc;
 using DreamSchedulerApplication.Models;
 using DreamSchedulerApplication.Libraries;
 using System.Web.Security;
-using System.Security.Principal;
-using DreamSchedulerApplication.Security;
 
 namespace DreamSchedulerApplication.Controllers
 {
@@ -62,8 +60,12 @@ namespace DreamSchedulerApplication.Controllers
                 {
                     //if user is logged in, create an encrypted cookie
                     FormsAuthentication.SetAuthCookie(user.Username, false);
-                    if (user.Roles.Contains("admin")) return RedirectToAction("Index", "Admin");
-                    return RedirectToAction("Index", "Student");
+                    if (user.Roles.Contains("admin")) return RedirectToAction("Database", "Admin");
+                    else if (user.Roles.Contains("student")) return RedirectToAction("Index", "Student");
+
+                    ModelState.AddModelError("", "Your account has not been activated yet");
+                    LogOff();
+                    return View("login");
                 }
                 else
                 {
@@ -95,8 +97,7 @@ namespace DreamSchedulerApplication.Controllers
                 var newUser = new User { Username = model.Username, Password = encryptedPassword, Roles = "student" };
 
                 var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, Entry = model.Entry, GPA = model.GPA };
-                //MATCH (u:User {Username:'admin'}) SET u.Roles = 'admin'
-                // create the account in the database
+
                 try
                 {
                     client.Cypher
@@ -112,13 +113,6 @@ namespace DreamSchedulerApplication.Controllers
                     else throw exception;
                 }
 
-                //Create HasToComplete relationship between student and all courses
-               /* client.Cypher
-                                .Match("(u:User)-[:IsA]->(s:Student), (c:Course)")
-                                .Where((User u) => u.Username == newUser.Username)
-                                .Create("(s)-[:HasToComplete]->(c)")
-                                .ExecuteWithoutResults();*/
-
                 //Create new session
                 FormsAuthentication.SetAuthCookie(newUser.Username, false);
                 return RedirectToAction("Index", "Student");
@@ -128,6 +122,45 @@ namespace DreamSchedulerApplication.Controllers
             return View(model);
         }
 
+        // GET: /Account/RequestAdminAccount
+        public ActionResult RequestAdminAccount()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/RequestAdminAccount
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RequestAdminAccount(RequestAdminAccountViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var encryptedPassword = PasswordHash.CreateHash(model.Password);
+                var newUser = new User { Username = model.Username, Password = encryptedPassword, Roles = "" };
+
+                var newAdmin = new Admin { FirstName = model.FirstName, LastName = model.LastName };
+
+                try
+                {
+                    client.Cypher
+                                .Create("(u:User {newUser})-[:IsA]->(a:Admin {newAdmin})")
+                                .WithParam("newUser", newUser)
+                                .WithParam("newAdmin", newAdmin)
+                                .ExecuteWithoutResults();
+                }
+                catch (Neo4jClient.NeoException exception)
+                {
+                    if (exception.Message.Contains("Username")) { ModelState.AddModelError("", "User with such username already exists"); return View("Register"); }
+                    else throw exception;
+                }
+
+                return View("RequestAdminAccountConfirmation");
+            }
+
+            // model is not valid
+            return View(model);
+        }
 
         //
         // POST: /Account/LogOff
@@ -135,10 +168,46 @@ namespace DreamSchedulerApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            //Session.Clear();
             FormsAuthentication.SignOut();
-            //HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             return RedirectToAction("Index", "Home");
         }
+
+        // GET: /Account/EditAccount
+        public ActionResult EditAccount()
+        {
+            var academicRecord = new Student();
+
+
+            var student = client.Cypher
+                                        .Match("(u:User)-[]->(s:Student)")
+                                        .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+                                        .Return((s) => s.As<Student>())
+                                        .Results.First();
+
+            return View(student);
+        }
+
+        // POST: /Account/EditAccount
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAccount(Student model)
+        {
+            if (ModelState.IsValid)
+            {
+                var newStudent = new Student { FirstName = model.FirstName, LastName = model.LastName, StudentID = model.StudentID, GPA = model.GPA, Entry = model.Entry };
+
+                client.Cypher
+                                .Match("(u:User)-->(s:Student)")
+                                .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+                                .Set("s = {newStudent}")
+                                .WithParam("newStudent", newStudent)
+                                .ExecuteWithoutResults();
+
+                if (HttpContext.User.IsInRole("admin")) return RedirectToAction("Database", "Admin");
+                return RedirectToAction("Index", "Student");
+            }
+            else return View(model);
+        }
+
     }
 }
