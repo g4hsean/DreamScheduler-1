@@ -70,38 +70,52 @@ namespace DreamSchedulerApplication.Models
             //Get courses that student has not yet taken
             List<Course> unscheduledCourses = getUnscheduledCourses(currentStudent);
 
-            foreach (var constraint in constraints)
+            for (int semester = 0; unscheduledCourses.Count() != 0 && semester < 50; )
             {
-                //Break if all courses have been scheduled
-                if (unscheduledCourses.Count() == 0) break;
-                
+
                 //Get semester
-                int semester = constraint.Semester;
-                var semesterName = getSemesterName(currentStudent, semester);
+                string semesterName = "";
+                int NumberOfCourses = 0;
+
+                if (constraints.Count() != 0)
+                {
+                    var constraint = constraints.First();
+                    constraints.RemoveAt(0);
+
+                    semester = constraint.Semester;
+                    semesterName = getSemesterName(currentStudent, semester);
+                    NumberOfCourses = constraint.NumberOfCourses;
+                }
+                else
+                {
+                    semester++;
+                    semesterName = getSemesterName(currentStudent, semester);
+                    NumberOfCourses = 5;
+                }
 
                 //Schedule specified number of courses for each semester
-                for (int coursesToSchedule = constraint.NumberOfCourses; coursesToSchedule > 0; coursesToSchedule--)
+                for (int coursesToSchedule = NumberOfCourses; coursesToSchedule > 0; coursesToSchedule--)
                 {
                     foreach (var course in unscheduledCourses)
                     {
                         //If not given in current semester, skip the course
-                        if(!givenInSemester(course,semesterName)) continue;
+                        if (!givenInSemester(course, semesterName)) continue;
 
                         //If prerequisites not satisfied, skip the course                                    
-                        if(!prerequisitesSatisfied(currentStudent, course, semester)) continue;
-    
+                        if (!prerequisitesSatisfied(currentStudent, course, semester)) continue;
+
                         //Schedule course
                         scheduleCourse(currentStudent, course, semester, semesterName);
 
                         //Remove scheduled course from unscheduled courses
                         unscheduledCourses.Remove(course);
-                       
+
                         //Schedule next course
                         break;
                     }
                 }
             }
-          
+
             //Return generated schedule
             return getSequence(currentStudent);
         }
