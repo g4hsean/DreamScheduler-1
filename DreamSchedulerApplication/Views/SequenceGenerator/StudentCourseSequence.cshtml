@@ -6,33 +6,74 @@
 
 <h2>Course Sequence</h2>
 
-<table class="table">
+@{
+    string CurrentSemester = "test";
+}
+<div class="row">
+    <div class="col-sm-4">
+        <br />
+        <input type="button" class="btn btn-primary" value="Generate New Schedule" onclick="location.href='@Url.Action("ResetCustomSequence", "SequenceGenerator")'" />
+    </div>
+    <div class="col-sm-6">
+        @{
+            char FirstSemester = 'F';
+        }
+        @foreach (var item in Model)
+        {
 
-    <caption style="margin-bottom: 30px; font-weight: bold">Course sequence</caption>
-    <tr>
-        <th>
-            Semester season
-        </th>
-        <th>
-            Title
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SemesterName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.Code)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item.Course.Code, semesterName = item.SemesterName }, null)
-            </td>
-        </tr>
-    }
+            if (CurrentSemester != item.SemesterName)
+            {
+            
+               CurrentSemester = item.SemesterName;
+        
 
-</table>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="container">
+                                <div class="navbar-left">
+                                    Semester : @Html.DisplayFor(modelItem => item.SemesterName)
+                                </div>
+                                <div class="navbar-right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
 
-<input type="button" value="Generate New Schedule" onclick="location.href='@Url.Action("ResetCustomSequence", "SequenceGenerator")'" />
+                        <table class="table">
+                            <tr class="alert-info">
+                                <td><b>Title</b></td>
+                                <td class="text-center"><b>Original position in sequence</b></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            @foreach (var item1 in Model)
+                            {
+
+                                if (CurrentSemester == item1.SemesterName)
+                                {
+
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item1.Course.Code)</td>
+                                        <td class="text-center">@Html.DisplayFor(modelItem => item1.Course.SemesterInSequence)</td>
+                                        <td class="text-right">
+                                            @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item1.Course.Code, semesterName = item1.SemesterName }, null)
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </table>
+
+                    </div>
+                </div>
+
+            }
+
+        }
+    </div>
+    <div class="col-sm-4"></div>
+
+</div>

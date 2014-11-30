@@ -6,6 +6,60 @@
 
 <h2>Course Sequence</h2>
 
+@{
+    string CurrentSemester = "test";
+}
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-6">
+        @foreach (var item in Model)
+        {
+            if (CurrentSemester != item.SemesterName)
+            {
+                CurrentSemester = item.SemesterName;
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="container">
+                                <div class="navbar-left">
+                                    Semester : @Html.DisplayFor(modelItem => item.SemesterName)
+                                </div>
+                                <div class="navbar-right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="table">
+                            @foreach (var item1 in Model)
+                            {
+
+                                if (CurrentSemester == item1.SemesterName)
+                                {
+
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item1.Course.Code)</td>
+                                        <td></td>
+                                        <td class="text-right">
+                                            @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item1.Course.Code, semesterName = item1.SemesterName }, null)
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </table>
+
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+    <div class="col-sm-4"></div>
+
+</div>
 <table class="table">
 
     <caption style="margin-bottom: 30px; font-weight: bold">Course sequence</caption>
