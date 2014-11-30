@@ -28,5 +28,9 @@ table#container {
 }
 
 table#container td, th{
-    width: 120px;
+    width: 140px;
+}
+
+table#container td.listElement, th.listElement {
+    width: 0;
 }

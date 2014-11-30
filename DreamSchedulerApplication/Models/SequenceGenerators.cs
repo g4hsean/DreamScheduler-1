@@ -364,4 +364,10 @@ namespace DreamSchedulerApplication.Models
         [Range(0, 6, ErrorMessage = "Number of courses must be between 0 and 6")] 
         public int NumberOfCourses { get; set; }
     }
+
+    public class ConstraintsViewModel
+    {
+        public Student Student {get; set;}
+        public List<Constraint> Constraints {get; set;}
+    }
 }

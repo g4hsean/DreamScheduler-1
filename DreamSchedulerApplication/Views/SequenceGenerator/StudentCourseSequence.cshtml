@@ -4,28 +4,26 @@
     ViewBag.Title = "Custom Course Sequence";
 }
 
-<h2>Course Sequence</h2>
+<h2 style="text-align: center">Course Sequence</h2>
 
 @{
     string CurrentSemester = "test";
 }
-<div class="row">
-    <div class="col-sm-4">
+    <div>
         <br />
-        <input type="button" class="btn btn-primary" value="Generate New Schedule" onclick="location.href='@Url.Action("ResetCustomSequence", "SequenceGenerator")'" />
+        <input type="button" class="btn btn-primary col-sm-2 col-md-offset-7" value="Generate New Schedule" onclick="location.href='@Url.Action("ResetCustomSequence", "SequenceGenerator")'" />
     </div>
-    <div class="col-sm-6">
-        @{
-            char FirstSemester = 'F';
-        }
+    <div class="row">
+    <div class="col-sm-6 col-md-offset-3" style=" margin-top: 40px">
+
         @foreach (var item in Model)
         {
 
             if (CurrentSemester != item.SemesterName)
             {
-            
-               CurrentSemester = item.SemesterName;
-        
+
+                CurrentSemester = item.SemesterName;
+
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -43,7 +41,6 @@
                         <table class="table">
                             <tr class="alert-info">
                                 <td><b>Title</b></td>
-                                <td class="text-center"><b>Original position in sequence</b></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -55,7 +52,6 @@
 
                                     <tr>
                                         <td>@Html.DisplayFor(modelItem => item1.Course.Code)</td>
-                                        <td class="text-center">@Html.DisplayFor(modelItem => item1.Course.SemesterInSequence)</td>
                                         <td class="text-right">
                                             @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item1.Course.Code, semesterName = item1.SemesterName }, null)
                                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -74,6 +70,7 @@
 
         }
     </div>
+
     <div class="col-sm-4"></div>
 
 </div>

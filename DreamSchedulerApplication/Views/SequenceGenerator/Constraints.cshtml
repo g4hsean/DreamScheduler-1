@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.List<DreamSchedulerApplication.Models.Constraint>
+﻿@model DreamSchedulerApplication.Models.ConstraintsViewModel
 
 @{
     ViewBag.Title = "Constraints";
@@ -6,10 +6,7 @@
 
 <h2>Constraints</h2>
 
-
-<p class="text-center"><a href="@Url.Action("Index", "AcademicRecord")" class="btn btn-danger" role="button">import your academic record</a></p>
-
-<div class="row">
+<div class="row" style="margin-top: 40px">
     <div class="col-sm-4">
         <div class="alert alert-info" role="alert">
             To build your sequence :
@@ -17,7 +14,9 @@
             <br />
             - Add constraints to each of your semester!
             <br />
-            - Default sequence:  set number of course to 5 for 8 semesters
+            - <a href="@Url.Action("Index", "AcademicRecord")" style="font-weight: bold">Fill your academic record</a> to get a customized schedule!
+            <br />
+            - <a href="@Url.Action("GenerateDefaultSequence", "SequenceGenerator")" style="font-weight: bold">Click here</a> to view default course sequence!
 
         </div>
     </div>
@@ -41,20 +40,21 @@
 
         <table id="container">
             <tr>
+                <th class="listElement"></th>
                 <th>Semester</th>
                 <th>
                     Number of Courses
                 </th>
             </tr>
-            @Html.EditorForModel()
+            @Html.EditorFor(constraint => Model.Constraints)
         </table>
 
         <br />
-        <a class="btn btn-primary" href="" id="btnAdd">Add Semester</a>
+        <a class="btn btn-default" href="" id="btnAdd">Add Semester</a>
 
         <div class="form-group">
             <div class="col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" style="margin-top: 40px" />
+                <input type="submit" value="Generate Sequence" class="btn btn-primary" style="margin-top: 40px" />
             </div>
         </div>
     </div>
@@ -64,12 +64,40 @@
     <script type="text/javascript">
         $(function () {
             $("#btnAdd").click(function (e) {
-                var itemIndex = $("#container .listElement").length;
+                var itemIndex = $("#container td.listElement").length;
                 var semester = +$("#container tr:last-of-type .listElement input").val() + 1;
+                var semesterName = getSemesterName(semester);
                 e.preventDefault();
-                var newItem = $("<tr><td class='listElement'><input type='text' id='" + itemIndex + "__Semester' name='[" + itemIndex + "].Semester'/ value='" + semester + "' readonly='readonly'></td><td><input type='text' id='" + itemIndex + "__NumberOfCourses' name='[" + itemIndex + "].NumberOfCourses' /></tr>");
+                var newItem = $("<tr><td class='listElement'><input type='hidden' id='Constraints" + itemIndex + "__Semester' name='Constraints[" + itemIndex + "].Semester'/ value='" + semester + "' readonly='readonly'></td><td class='semesterName'><input type='text' style='border: 0px solid; outline: none' id='SemesterName' name='SemesterName'/ value='" + semesterName + "' readonly='readonly'></td><td><input class='form-control text-box single-line' type='number' data-val='true' data-val-number='The field Number of courses must be a number.'' data-val-range='Number of courses must be between 0 and 6' data-val-range-max='6' data-val-range-min='0' data-val-required='Number of courses you want to take is required' id='Constraints" + itemIndex + "__NumberOfCourses' name='Constraints[" + itemIndex + "].NumberOfCourses' /></tr>");
                 $("#container").append(newItem);
             });
         });
+
+        $(function () {
+            $(document).ready(function () {
+                var semester = +$("#container tr:last-of-type .listElement input").val();
+                var semesterName = getSemesterName(semester);
+                var newItem = $("<input type='text'  style='border: 0px solid; outline: none' id='SemesterName' name='SemesterName'/ value='" + semesterName + "' readonly='readonly'>");
+                $(".semesterName").html(newItem);
+            });
+        });
+
+        function getSemesterName(semester)
+        {
+            var entry = "@Model.Student.Entry";
+            var semesterName = "";
+            if (entry == "Fall")
+            {
+                if (semester % 2 == 1) semesterName = "Fall";
+                else semesterName = "Winter";
+            }
+            else
+            {
+                if (semester % 2 == 0) semesterName = "Fall";
+                else semesterName = "Winter";
+            }
+            return (semesterName + " " + Math.floor((semester + 1)/2));
+        }
+
     </script>
 }

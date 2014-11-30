@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "member Home Page";
+    ViewBag.Title = "Student Portal";
 }
 
 <div class="jumbotron">
@@ -7,22 +7,9 @@
 
 
 </div>
-<div class="row">
 
-    <div class="col-sm-6 col-md-4"></div>
+<div class="row">
     <div class="col-sm-6 col-md-4">
-
-        <div class="alert alert-danger" role="alert">To have a customize sequence please import your academic record</div>
-
-        <p class="text-center"><a href="@Url.Action("Index", "AcademicRecord")" class="btn btn-danger" role="button">import your academic record</a></p>
-
-    </div>
-    <div class="col-sm-6 col-md-4"></div>
-</div>
-<br />
-<br />
-<div class="row">
-    <div class="col-sm-9 col-md-6">
         <div class="text-center">
             <br />
             <img src="~/Content/images/sequencelogo.png" alt="...">
@@ -32,21 +19,17 @@
             </div>
         </div>
     </div>
-
-    <!--
     <div class="col-sm-6 col-md-4">
         <div class="text-center">
             <br />
             <img src="~/Content/images/courselogo.png" alt="...">
             <div class="caption">
-                <h2>Browse Course Sequence</h2>
-                <p><a href="@Url.Action("ViewDefaultSequence", "SequenceGenerator")" class="btn btn-success" role="button">Button</a></p>
+                <h2>Manage Academic Record</h2>
+                <p><a href="@Url.Action("Index", "AcademicRecord")" class="btn btn-success" role="button">Button</a></p>
             </div>
         </div>
     </div>
-    -->
-
-    <div class="col-sm-9 col-md-6">
+    <div class="col-sm-6 col-md-4">
         <div class="text-center">
             <br />
             <img src="~/Content/images/contactlogo.png" alt="...">
@@ -57,4 +40,3 @@
         </div>
     </div>
 </div>
-

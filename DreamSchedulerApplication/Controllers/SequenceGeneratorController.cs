@@ -59,7 +59,15 @@ namespace DreamSchedulerApplication.Controllers
             var constraints = new List<Constraint>();
             constraints.Add(new Constraint { Semester = nextSemester, NumberOfCourses = 5 });
 
-            return View(constraints);
+            var currentStudent = client.Cypher
+                                                .Match("(u:User)-->(s:Student)")
+                                                .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+                                                .Return(s => s.As<Student>())
+                                                .Results.First();
+
+            var constraintsViewModel = new ConstraintsViewModel() { Student = currentStudent, Constraints = constraints };
+
+            return View(constraintsViewModel);
         }
 
         [HttpPost]
