@@ -57,25 +57,21 @@ namespace DreamSchedulerApplication.Controllers
 
             foreach (var lecture in lectures)
             {
-                var currentSection = lecture.Section;
+                
 
                 var labs = client.Cypher
                                       .Match("(c:Course)-->(s:Semester)-->(l:Lab)")
                                       .Where((Course c) => c.Code == code)
-                                      .AndWhere((Course.Semester s) => s.Name == semesterName)
+                                      .AndWhere((Course.Lab l) => l.ParentSection == lecture.Section)
                                       .Return(l => l.As<Course.Lab>())
                                       .Results;
-
-                labs = labs.Where(lab => lab.Section[0] == currentSection[0]);
 
                 var tutorials = client.Cypher
                                       .Match("(c:Course)-->(s:Semester)-->(t:Tutorial)")
                                       .Where((Course c) => c.Code == code)
-                                      .AndWhere((Course.Semester s) => s.Name == semesterName)
+                                      .AndWhere((Course.Tutorial t) => t.ParentSection == lecture.Section)
                                       .Return(t => t.As<Course.Tutorial>())
                                       .Results;
-
-                tutorials = tutorials.Where(tutorial => tutorial.Section[0] == currentSection[0]);
 
                 var section = new CourseDetails.Section() { Lecture = lecture, Labs = labs, Tutorials = tutorials };
                 courseDetails.sections.Add(section);              

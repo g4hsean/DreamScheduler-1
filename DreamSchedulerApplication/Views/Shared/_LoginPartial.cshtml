@@ -24,8 +24,8 @@
         <ul class="dropdown-menu text-center">
             @if (HttpContext.Current.User.IsInRole("student")) {
                 <li><a href="@Url.Action("EditAccount", "Account")">Edit Account</a></li>
+                <li class="divider"></li>
             }
-            <li class="divider"></li>
             <li class="text-center">
                 ﻿@if (Request.IsAuthenticated)
                 {

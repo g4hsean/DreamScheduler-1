@@ -71,6 +71,7 @@ def getFallWinter(sequenceDict):
     prerequisitesToRemove = ['CWTC','BCEE','BLDG','CIVI','COEN','MECH','INDU','IADI']
     allowedCourses = ['ENGR','COMP','ENCS 282','ELEC 275','SOEN']
     multiSemesterCourses = [['SOEN 490',None]]
+    currentLectureSection = ''
     while hasNext == True:
         try:
             endTest = tag.text # check if there are more tags to parse
@@ -113,15 +114,29 @@ def getFallWinter(sequenceDict):
         else:
             sequenceNumber = -1
             
-        courseInformationMasterList[courseID] = {'Title': courseDescription,'Credits' : courseCreditAmount,'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {}, 'SemesterInSequence' : sequenceNumber}
+        courseInformationMasterList[courseID] = {'Title': courseDescription,'Credits' : courseCreditAmount,'Prerequisites' : [],'Corequisites':[],'Restrictions' : [], 'Course Dates' : {}, 'SemesterInSequence' : sequenceNumber}
         currentCourseLocation = 1
-
+        coRequisitesList = []
         if 'Prerequisite' in str(course[currentCourseLocation]):
+            if "concurrently" in course[1].text:
+                text = re.split(r'[;.]',course[1].text)
+                for item in text:
+                    if "concurrently" in item:
+                        coRequisitesList = prerequisitePattern.findall(item)
+            courseInformationMasterList[courseID]['Corequisites'] = coRequisitesList
             prerequisitesList = prerequisitePattern.findall(str(course[1]))
+
+            toRemove = []
             for prerequisite in prerequisitesList:
                 for remove in prerequisitesToRemove:
                     if remove in prerequisite:
-                        prerequisitesList.remove(prerequisite)
+                        toRemove.append(prerequisite)
+                for corequisite in coRequisitesList:
+                    if corequisite in prerequisite:
+                        toRemove.append(prerequisite)
+            for item in toRemove:
+                prerequisitesList.remove(item)
+
             courseInformationMasterList[courseID]['Prerequisites'] = prerequisitesList
             currentCourseLocation += 1
         elif 'Special Note' in str(course[currentCourseLocation]): # This is not necessary but in case in the future a speacial note is added before Prerequisite text
@@ -142,10 +157,19 @@ def getFallWinter(sequenceDict):
             courseInformationMasterList[courseID]['Restrictions'] = restrictionList
             currentCourseLocation += 1
         elif 'Prerequisite' in str(course[currentCourseLocation]): # This is not necessary but in case in the future a Prerequisite is added before special note text
+            if "concurrently" in course[2].text:
+                text = re.split(r'[;.]',course[2].text)
+                for item in text:
+                    if "concurrently" in item:
+                        coRequisitesList = prerequisitePattern.findall(item)
+            courseInformationMasterList[courseID]['Corequisites'] = coRequisitesList
             prerequisitesList = prerequisitePattern.findall(str(course[2]))
             for prerequisite in prerequisitesList:
                 for remove in prerequisitesToRemove:
                     if remove in prerequisite:
+                        prerequisitesList.remove(prerequisite)
+                for corequisite in coRequisitesList:
+                    if corequisite in prerequisite:
                         prerequisitesList.remove(prerequisite)
             courseInformationMasterList[courseID]['Prerequisites'] = prerequisitesList
             currentCourseLocation += 1
@@ -187,19 +211,20 @@ def getFallWinter(sequenceDict):
                 if 'Lect' in typeOfClass:
                     if 'Lecture' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lecture'] = []
+                    currentLectureSection = courseSection
                     courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lecture'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
                 elif 'Tut' in typeOfClass:
                     if 'Tutorial' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Tutorial'] = []
-                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Tutorial'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation})
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Tutorial'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation,'ParentSection':currentLectureSection})
                 elif 'Lab' in typeOfClass:
                     if 'Lab' not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lab'] = []
-                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lab'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation})
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason]['Lab'].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation,'ParentSection':currentLectureSection})
                 else:
                     if typeOfClass not in courseInformationMasterList[courseID]['Course Dates'][courseSeason].keys():
                         courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass] = []
-                    courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor})
+                    courseInformationMasterList[courseID]['Course Dates'][courseSeason][typeOfClass].append({'Section' : courseSection,'Dates' : date, 'Location' : buildingLocation, 'Professor' : professor,'ParentSection':currentLectureSection})
                 currentEntry += 1
                 
         for course in multiSemesterCourses:
@@ -216,7 +241,7 @@ def getFallWinter(sequenceDict):
                 courseInformationMasterList[speacialCourse]["Course Dates"]["Winter"] = oldValues
                 
         if speacialCourse not in courseInformationMasterList.keys():
-            courseInformationMasterList[speacialCourse] = {'Title': "",'Credits' : "",'Prerequisites' : [],'Restrictions' : [], 'Course Dates' : {"Fall":{"Lecture":[],"Location":{"Building":"","Room":""}},"Winter":{"Lecture":[],"Location":{"Building":"","Room":""}}}, 'SemesterInSequence' : sequenceDict[speacialCourse]}
+            courseInformationMasterList[speacialCourse] = {'Title': "",'Credits' : "",'Prerequisites' : [],'Corequisites':[],'Restrictions' : [], 'Course Dates' : {"Fall":{"Lecture":[],"Location":{"Building":"","Room":""}},"Winter":{"Lecture":[],"Location":{"Building":"","Room":""}}}, 'SemesterInSequence' : sequenceDict[speacialCourse]}
         
     with open('JSONdata.txt', 'w') as outfile:
         json.dump(courseInformationMasterList, outfile)

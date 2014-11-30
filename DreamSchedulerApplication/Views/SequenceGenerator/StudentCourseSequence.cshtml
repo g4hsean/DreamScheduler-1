@@ -11,12 +11,6 @@
     <caption style="margin-bottom: 30px; font-weight: bold">Course sequence</caption>
     <tr>
         <th>
-            Semester in sequence
-        </th>
-        <th>
-            Semester scheduled
-        </th>
-        <th>
             Semester season
         </th>
         <th>
@@ -27,12 +21,6 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.SemesterInSequence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Semester)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SemesterName)
             </td>

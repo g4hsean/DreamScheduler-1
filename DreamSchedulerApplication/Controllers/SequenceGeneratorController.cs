@@ -30,12 +30,6 @@ namespace DreamSchedulerApplication.Controllers
             return View("DefaultCourseSequence", defaultSequenceGenerator.GenerateDefaultSequence());
         }
 
-        public ActionResult ViewDefaultSequence()
-        {
-            return View("DefaultCourseSequence", defaultSequenceGenerator.ViewDefaultSequence());
-        }
-
-
         public ActionResult GenerateStudentSequence(List<Constraint> constraints)
         {
             return View("StudentCourseSequence", studentSequenceGenerator.GenerateStudentSequence(constraints));
@@ -56,7 +50,7 @@ namespace DreamSchedulerApplication.Controllers
                          .Match("(u:User)-->(:Student)-[r:Completed]->(:Course)")
                          .Where((User u) => u.Username == HttpContext.User.Identity.Name)
                          .Return(r => r.As<Completed>().Semester)
-                         .OrderByDescending("r.semester")
+                         .OrderByDescending("r.Semester")
                          .Results;
 
             var nextSemester = 1;

@@ -50,11 +50,9 @@ namespace DreamSchedulerApplication.Models
                         .WithParam("newDatabase", newDatabase)
                         .ExecuteWithoutResults();
 
-            //Remove all courses
-            client.Cypher
-                        .Match("(c:Course), (c1:Course)-[r]-()")
-                        .Delete("r, c")
-                        .ExecuteWithoutResults();
+            //Remove all courses and related data
+            clearCourseDatabase();
+
 
             //Execute  scrapper.py to create JSON files with scraped data
             //scrapper.py file must be in the python27 folderS
@@ -192,6 +190,19 @@ namespace DreamSchedulerApplication.Models
                                            .ExecuteWithoutResults();
                     }
 
+                    var corequisites = course.Value["Corequisites"].ToObject<string[]>();
+
+                    foreach (var corequisite in corequisites)
+                    {
+                        client.Cypher
+                                           .Match("(c1:Course)", "(c2:Course)")
+                                           .Where((Course c1) => c1.Code == corequisite)
+                                           .AndWhere((Course c2) => c2.Code == courseCode)
+                                           .Create("(c1)-[:CorequisiteFor]->(c2)")
+                                           .ExecuteWithoutResults();
+                    }
+
+
                 }
             }
         }
@@ -233,5 +244,37 @@ namespace DreamSchedulerApplication.Models
             }
         }
 
+        private void clearCourseDatabase()
+        {
+            client.Cypher
+            .Match("(c:Course)")
+            .OptionalMatch(" (c)-[r]-()")
+            .Delete("r,c")
+            .ExecuteWithoutResults();
+
+            client.Cypher
+                        .Match("(s:Semester)")
+                        .OptionalMatch(" (s)-[r]-()")
+                        .Delete("r,s")
+                        .ExecuteWithoutResults();
+
+            client.Cypher
+                        .Match("(l:Lecture)")
+                        .OptionalMatch(" (l)-[r]-()")
+                        .Delete("r,l")
+                        .ExecuteWithoutResults();
+
+            client.Cypher
+                        .Match("(t:Tutorial)")
+                        .OptionalMatch(" (t)-[r]-()")
+                        .Delete("r,t")
+                        .ExecuteWithoutResults();
+
+            client.Cypher
+                        .Match("(l:Lab)")
+                        .OptionalMatch(" (l)-[r]-()")
+                        .Delete("r,l")
+                        .ExecuteWithoutResults();
+        }
     }
 }

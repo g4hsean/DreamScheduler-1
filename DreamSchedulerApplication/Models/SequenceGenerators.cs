@@ -138,7 +138,7 @@ namespace DreamSchedulerApplication.Models
         {
             //Not scheduled and not taken prerequisites
             var prerequisitesNotSatisfied1 = client.Cypher
-                                               .Match("(c1:Course)-[:PrerequisiteFor]->(c2:Course), (s:Student)")
+                                               .Match("(c1:Course)-[:PrerequisiteFor|CorequisiteFor]->(c2:Course), (s:Student)")
                                                .Where((Student s) => s.StudentID == currentStudent.StudentID)
                                                .AndWhere((Course c2) => c2.Code == course.Code)
                                                .AndWhere("NOT (s)-->(c1)")
@@ -243,41 +243,6 @@ namespace DreamSchedulerApplication.Models
             return sequence.CourseList;
         }
 
-        public List<Sequence.CourseEntry> ViewDefaultSequence()
-        {
-            //Create new sequence
-            var sequence = new Sequence();
-            sequence.CourseList = new List<Sequence.CourseEntry>();
-
-            var currentStudent = getCurrentStudent();
-
-            //Get all courses
-            List<Course> unscheduledCourses = getUnscheduledCourses(currentStudent);
-
-            //Schedule courses for each semester
-            for (int semester = 1; unscheduledCourses.Count() != 0; semester++)
-            {
-                var semesterName = getSemesterName(currentStudent, semester);
-
-                //Schedule up to 5 courses for each semester
-                for (int coursesToSchedule = 5; coursesToSchedule > 0; coursesToSchedule--)
-                {
-                    foreach (var course in unscheduledCourses)
-                    {
-                        scheduleCourse(course, semester, semesterName, sequence);
-
-                        //Remove scheduled course from unscheduled courses
-                        unscheduledCourses.Remove(course);
-
-                        //Schedule next course
-                        break;
-                    }
-                }
-            }
-
-            return sequence.CourseList;
-        }
-
         protected override List<Course> getUnscheduledCourses(Student currentStudent)
         {
             return client.Cypher
@@ -295,6 +260,12 @@ namespace DreamSchedulerApplication.Models
                                     .Return(c1 => c1.As<Course>())
                                     .Results;
 
+            var corequisites = client.Cypher
+                                    .Match("(c1:Course)-[:CorequisiteFor]->(c2:Course)")
+                                    .Where((Course c2) => c2.Code == course.Code)
+                                    .Return(c1 => c1.As<Course>())
+                                    .Results;
+
             var prerequisitesSatisfied = true;
             foreach (var prerequisite in prerequisites)
             {
@@ -306,6 +277,15 @@ namespace DreamSchedulerApplication.Models
                 }
                 //Prerequisite found in sequence with the same semester number
                 if (sequence.CourseList.Find(x => x.Course.Code == prerequisite.Code && x.Semester == semester) != null)
+                {
+                    prerequisitesSatisfied = false;
+                    break;
+                }
+            }
+            foreach (var corequisite in corequisites)
+            {
+                //Prerequisite found in non-scheduled course list
+                if (unscheduledCourses.Find(x => x.Code == corequisite.Code) != null)
                 {
                     prerequisitesSatisfied = false;
                     break;

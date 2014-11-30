@@ -77,8 +77,12 @@ namespace DreamSchedulerApplication.Models
             public string Professor { get; set; }
         }
 
-        public class Lab : Activity { }
-        public class Tutorial : Activity { }
+        public class Lab : Activity {
+            public string ParentSection { get; set; }
+        }
+        public class Tutorial : Activity {
+            public string ParentSection { get; set; }
+        }
     }
 
     public class Professor
