@@ -209,5 +209,47 @@ namespace DreamSchedulerApplication.Controllers
             else return View(model);
         }
 
+        //Get /Account/ChangePassword
+        public ActionResult ChangePassword()
+        {
+            var User = client.Cypher
+                                        .Match("(u:User)-[]->(s:Student)")
+                                        .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+                                        .Return((u) => u.As<ChangePasswordViewModel>())
+                                        .Results.First();
+
+            return View(User);
+        }
+
+        //POST : /Account/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var encryptedPassword = PasswordHash.CreateHash(model.Password);
+                var newUser = new User { };//intialize 
+                if (HttpContext.User.IsInRole("admin"))
+                {
+                    newUser = new User { Username = HttpContext.User.Identity.Name, Password = encryptedPassword, Roles = "admin" };
+                }
+                else
+                {
+                    newUser = new User { Username = HttpContext.User.Identity.Name, Password = encryptedPassword, Roles = "student" };
+                }
+                client.Cypher
+                                .Match("(u:User)-->(s:Student)")
+                                .Where((User u) => u.Username == HttpContext.User.Identity.Name)
+                                .Set("u = {newUser}")
+                                .WithParam("newUser", newUser)
+                                .ExecuteWithoutResults();
+
+                if (HttpContext.User.IsInRole("admin")) return RedirectToAction("Database", "Admin");
+                return RedirectToAction("Index", "Student");
+            }
+            else return View(model);
+        }
+
     }
 }

@@ -193,7 +193,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="fonts\Junction.otf" />
     <None Include="Properties\PublishProfiles\DreamScheduler.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -241,6 +240,7 @@
     <Content Include="Views\Account\RequestAdminAccount.cshtml" />
     <Content Include="Views\Account\RequestAdminAccountConfirmation.cshtml" />
     <Content Include="Views\Student\CourseDetails.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
