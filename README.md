@@ -1,12 +1,13 @@
 DreamScheduler
 ==============
 
-SOEN 341 project - DreamTeam 
+#### TESTING SERVER 
+- dream.michalwozniak.ca (live)  
 
-----------------------------------------------------------
-- this is the main repo for the application
-- everyone must fork (copy) to his own account
-- when you create a new feature -> pull request -> we can then check it and add it to the main one
+### Description
+
+- System designed to automate readjustments to the departmental sequences and optimize the resulting sequences to meet any special needs of the user. 
+
 
 -----------------------------------------------------------
 ### current app
@@ -30,7 +31,12 @@ SOEN 341 project - DreamTeam
     - sequence
   - admin 
    - database page which offer a button that will later trigger a database update process
-  - the 3 different user see different navigation tab, view different page
-    - they also can't see function from other sub system ( security prevent this)
-- user can see their account information
-  - they can modfiy specific data like first name last name
+
+### Directory 
+- DatabaseScripts 
+  - ApplyConstraints.cql  -> All queries must be performed on the neo4j database using the browser 
+- WebScrapper
+  - Contains all the necessary python script
+  - Specific Readme to understand python execution 
+- DreamSchedulerApplication
+  - Contains the application 
