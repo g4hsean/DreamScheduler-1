@@ -10,27 +10,17 @@ DreamScheduler
 
 
 -----------------------------------------------------------
-### current app
+### Features
 
-- install neo4j 
-- start the database 
-- your database port must match this "http://localhost:7474/db/data" `if not you will need to update the code in the controller`
+- ##### Admin
+  - Database can be automatically updated at will. 
 
-- can create account (member), admin only by using the neo4j web browser 
-- log into the system
-  - validation for input login/registration 
-  - authentification method during login process
-- webapp is divide into 3 sub system 
-  - public, allow non logged in user to see
-    - see basic home page that descripe app
-    - can register, log in
-  - member which are the student
-    - see academic record
-    - see course list
-    - see professor list
-    - sequence
-  - admin 
-   - database page which offer a button that will later trigger a database update process
+- ##### Student
+  - customize his academic record
+  - view default sequence or create custom sequence based on academic record 
+  - view course details
+  - view professor list
+  
 
 ### Directory 
 - DatabaseScripts 
