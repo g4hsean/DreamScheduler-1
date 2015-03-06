@@ -1,0 +1,105 @@
+﻿@model DreamSchedulerApplication.Models.ConstraintsViewModel
+
+@{
+    ViewBag.Title = "Constraints";
+}
+
+<h2>Constraints</h2>
+
+<div class="row" style="margin-top: 40px">
+    <div class="col-sm-4">
+        <div class="alert alert-info" role="alert">
+            To build your sequence :
+            <br />
+            <br />
+            - Add constraints to each of your semester!
+            <br />
+            <br />
+            - <a class="btn-sm btn-default"  href="@Url.Action("Index", "AcademicRecord")" style="font-weight: bold">Fill your academic record</a> to get a customized schedule!
+            <br />
+            <br />
+            - <a class="btn-sm btn-default " href="@Url.Action("GenerateDefaultSequence", "SequenceGenerator")" style="font-weight: bold">Click here</a> to view default course sequence!
+
+        </div>
+    </div>
+    <div class="col-sm-4">
+
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+
+
+
+
+@Html.ValidationSummary("", new { @class = "text-danger" })
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+
+        <table id="container">
+            <tr>
+                <th class="listElement"></th>
+                <th>Semester</th>
+                <th>
+                    Number of Courses
+                </th>
+            </tr>
+            @Html.EditorFor(constraint => Model.Constraints)
+        </table>
+
+        <br />
+        <a class="btn btn-default" href="" id="btnAdd">Add Semester</a>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Generate Sequence" class="btn btn-primary" style="margin-top: 40px" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $("#btnAdd").click(function (e) {
+                var itemIndex = $("#container td.listElement").length;
+                var semester = +$("#container tr:last-of-type .listElement input").val() + 1;
+                var semesterName = getSemesterName(semester);
+                e.preventDefault();
+                var newItem = $("<tr><td class='listElement'><input type='hidden' id='Constraints" + itemIndex + "__Semester' name='Constraints[" + itemIndex + "].Semester'/ value='" + semester + "' readonly='readonly'></td><td class='semesterName'><input type='text' style='border: 0px solid; outline: none' id='SemesterName' name='SemesterName'/ value='" + semesterName + "' readonly='readonly'></td><td><input class='form-control text-box single-line' type='number' data-val='true' data-val-number='The field Number of courses must be a number.'' data-val-range='Number of courses must be between 0 and 6' data-val-range-max='6' data-val-range-min='0' data-val-required='Number of courses you want to take is required' id='Constraints" + itemIndex + "__NumberOfCourses' name='Constraints[" + itemIndex + "].NumberOfCourses' /></tr>");
+                $("#container").append(newItem);
+            });
+        });
+
+        $(function () {
+            $(document).ready(function () {
+                var semester = +$("#container tr:last-of-type .listElement input").val();
+                var semesterName = getSemesterName(semester);
+                var newItem = $("<input type='text'  style='border: 0px solid; outline: none' id='SemesterName' name='SemesterName'/ value='" + semesterName + "' readonly='readonly'>");
+                $(".semesterName").html(newItem);
+            });
+        });
+
+        function getSemesterName(semester)
+        {
+            var entry = "@Model.Student.Entry";
+            var semesterName = "";
+            if (entry == "Fall")
+            {
+                if (semester % 2 == 1) semesterName = "Fall";
+                else semesterName = "Winter";
+            }
+            else
+            {
+                if (semester % 2 == 0) semesterName = "Fall";
+                else semesterName = "Winter";
+            }
+            return (semesterName + " " + Math.floor((semester + 1)/2));
+        }
+
+    </script>
+}

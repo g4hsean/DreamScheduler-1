@@ -1,0 +1,76 @@
+﻿@model System.Collections.Generic.List<DreamSchedulerApplication.Models.Sequence.CourseEntry>
+
+@{
+    ViewBag.Title = "Custom Course Sequence";
+}
+
+<h2 style="text-align: center">Course Sequence</h2>
+
+@{
+    string CurrentSemester = "test";
+}
+<div class="btn-block text-center">
+    <br />
+    <input type="button" class="btn btn-danger" value="Generate New Schedule" onclick="location.href='@Url.Action("ResetCustomSequence", "SequenceGenerator")'" />
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-offset-3" style=" margin-top: 40px">
+
+        @foreach (var item in Model)
+        {
+
+            if (CurrentSemester != item.SemesterName)
+            {
+
+                CurrentSemester = item.SemesterName;
+
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="container">
+                                <div class="navbar-left">
+                                    Semester : @Html.DisplayFor(modelItem => item.SemesterName)
+                                </div>
+                                <div class="navbar-right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="table">
+                            <tr class="alert-info">
+                                <td><b>Title</b></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            @foreach (var item1 in Model)
+                            {
+
+                                if (CurrentSemester == item1.SemesterName)
+                                {
+
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item1.Course.Code)</td>
+                                        <td class="text-right">
+                                            @Html.ActionLink("Details", "CourseDetails", "Student", new { code = item1.Course.Code, semesterName = item1.SemesterName }, null)
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </table>
+
+                    </div>
+                </div>
+
+            }
+
+        }
+    </div>
+
+    <div class="col-sm-4"></div>
+
+</div>

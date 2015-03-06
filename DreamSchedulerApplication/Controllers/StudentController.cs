@@ -1,74 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using DreamSchedulerApplication.Models;
 using Neo4jClient;
-using DreamSchedulerApplication.Security;
+using System.Linq;
 
 namespace DreamSchedulerApplication.Controllers
 {
-    //only student can access
     [Authorize(Roles="student")]
     public class StudentController : Controller
     {
-         private readonly IGraphClient client;
+        private readonly IGraphClient client;
 
         public StudentController(IGraphClient graphClient)
         {
             client = graphClient;
         }
-        
 
-        // GET: Member
+        //GET: Student/Index
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult CourseSequence()
-        {
-            var courseSequence = new CourseSequence();
-            
-            courseSequence.CourseList = client.Cypher
-                         .Match("(p:Program)-[r]->(c:Course)")
-                         .Return((c, r) => new CourseSequence.CourseEntry
-                         {
-                             Course = c.As<CourseData.CourseInfo>(),
-                             Semester = r.As<ContainsCourse>().SemesterInSequence
-                         })
-                         .OrderBy("r.SemesterInSequence")
-                         .Results;
-
-            return View(courseSequence);
-        }
-
-
+        //GET: Student/Professors
         public ActionResult Professors()
         {
-
-            var prof = new ProfessorsData();
-
-            prof.professorsList = client.Cypher
+            IEnumerable<Professor> professorsList = client.Cypher
                                   .Match("(u:Professor)")
-                                  .Return(u =>u.As<ProfessorsData.Professors>())
+                                  .Return(u =>u.As<Professor>())
                                   .OrderBy("u.name")
                                   .Results;
-            return View(prof);
+
+            return View(professorsList);
         }
 
-
-        public ActionResult Courses()
+        //GET: Student/CourseDetails
+        public ActionResult CourseDetails(string code, string semesterName)
         {
-            var course = new CourseData();
+            var courseDetails = new CourseDetails();
 
-            course.courseList = client.Cypher
-                                  .Match("(u:Course)")
-                                  .Return(u => u.As<CourseData.CourseInfo>())
-                                  .OrderBy("u.courseName")
+            if (semesterName.Contains("Fall")) semesterName = "Fall";
+            else semesterName = "Winter";
+
+            courseDetails.Course = client.Cypher
+                                  .Match("(c:Course)")
+                                  .Where((Course c) => c.Code == code)
+                                  .Return(c => c.As<Course>())
+                                  .Results.First();
+
+            var lectures = client.Cypher
+                                  .Match("(c:Course)-->(s:Semester)-->(l:Lecture)")
+                                  .Where((Course c) => c.Code == code)
+                                  .AndWhere((Course.Semester s) => s.Name == semesterName)
+                                  .Return(l => l.As<Course.Lecture>())
                                   .Results;
-            return View(course);
+
+            foreach (var lecture in lectures)
+            {
+                
+
+                var labs = client.Cypher
+                                      .Match("(c:Course)-->(s:Semester)-->(l:Lab)")
+                                      .Where((Course c) => c.Code == code)
+                                      .AndWhere((Course.Lab l) => l.ParentSection == lecture.Section)
+                                      .Return(l => l.As<Course.Lab>())
+                                      .Results;
+
+                var tutorials = client.Cypher
+                                      .Match("(c:Course)-->(s:Semester)-->(t:Tutorial)")
+                                      .Where((Course c) => c.Code == code)
+                                      .AndWhere((Course.Tutorial t) => t.ParentSection == lecture.Section)
+                                      .Return(t => t.As<Course.Tutorial>())
+                                      .Results;
+
+                var section = new CourseDetails.Section() { Lecture = lecture, Labs = labs, Tutorials = tutorials };
+                courseDetails.sections.Add(section);              
+            }
+        
+            return View(courseDetails);
         }
 
     }

@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Course Entry</h2>
 
 
 @using (Html.BeginForm())
@@ -15,16 +15,14 @@
         <h4>Movie</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Course.courseName)
-        @Html.HiddenFor(model => model.Course.CourseDescription)
+        @Html.HiddenFor(model => model.Course.Code)
+        @Html.HiddenFor(model => model.Course.Title)
         @Html.HiddenFor(model => model.Course.Credits)
-        @Html.HiddenFor(model => model.Course.Prerequisites)
-        @Html.HiddenFor(model => model.Course.Restrictions)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Course.courseName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Course.Code, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.Course.courseName)
+                @Html.DisplayFor(model => model.Course.Code)
             </div>
         </div>
 

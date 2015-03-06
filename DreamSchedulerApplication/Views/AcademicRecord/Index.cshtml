@@ -4,12 +4,13 @@
     ViewBag.Title = "StudentRecord";
 }
 
-<h2 style="margin-bottom: 40px">StudentRecord</h2>
+<h2 style="margin-bottom: 40px">Academic Record</h2>
 
 
 <p>Student Name:  @Html.DisplayFor(model => model.Student.FirstName) @Html.DisplayFor(model => model.Student.LastName)</p>
 <p>Student ID: @Html.DisplayFor(model => model.Student.StudentID)</p>
-<p>Student GPA: @Html.DisplayFor(model => model.Student.GPA)</p>
+<br />
+<p>Entry: @Html.DisplayFor(model => model.Student.Entry)</p>
 
 
 <table class="table">
@@ -32,7 +33,7 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Course.courseName)
+                @Html.DisplayFor(modelItem => item.Course.Code)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Completed.Semester)
@@ -41,8 +42,8 @@
                 @Html.DisplayFor(modelItem => item.Completed.Grade)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditCourseEntry", new { code = item.Course.courseName }) |
-                @Html.ActionLink("Delete", "DeleteCourseEntry", new { code = item.Course.courseName })
+                @Html.ActionLink("Edit", "EditCourseEntry", new { code = item.Course.Code}) |
+                @Html.ActionLink("Delete", "DeleteCourseEntry", new { code = item.Course.Code })
             </td>
         </tr>
     }

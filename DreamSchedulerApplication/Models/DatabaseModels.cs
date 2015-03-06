@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DreamSchedulerApplication.Models
 {
+    //Node classes
     public class User
     {
         public String Username { get; set; }
@@ -16,108 +17,101 @@ namespace DreamSchedulerApplication.Models
 
     public class Student
     {
-
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [Display(Name = "Student ID")]
+        [RegularExpression(@"^\d{7}(?:\d{1})?$", ErrorMessage = "Invalid Student ID")]
         public int StudentID { get; set; }
+
+        public string Entry  { get; set; }
         public int GPA { get; set; }
     }
 
-
-    public class Completed
+    public class Admin
     {
-        public string Grade { get; set; }
-        public int Semester { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
     }
 
-    public class ContainsCourse
-    {
-        public int SemesterInSequence { get; set; }
-    }
 
-    //Initialization of database
     public class Database
     {
-        public string DatabaseName { get; set;}
+        public string DatabaseName { get; set; }
         public string lastUpdate { get; set; }
     }
 
-
-    //ALL ABOUT COURSE
-    public class CourseData
+    public class Course
     {
-        public IEnumerable<CourseInfo> courseList { get; set; }
-        public class CourseInfo
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Course Code is required")] 
+        [RegularExpression(@"\b[A-Z]{4}\b\s\b[0-9]{3}\b", ErrorMessage = "Invalid Course Code")]
+        public string Code { get; set; }
+
+        public string Credits { get; set; }
+        public string Title { get; set; }
+        public int SemesterInSequence { get; set; }
+
+        public class Semester
         {
-            [Display(Name = "Course ID ")]
-            public string courseName { get; set; }
-            public string[] Prerequisites { get; set; }
-            public string Credits { get; set; }
-            [Display(Name = "Course Name ")]
-            public string CourseDescription { get; set; }
+            public string Name { get; set; }
+        }
 
+        public class Activity
+        {
+            public string Section { get; set; }
+            public string StartTime { get; set; }
+            public string EndTime { get; set; }
+            public string[] Days { get; set; }
+            public string Building { get; set; }
+            public string Room { get; set; }
+        }
 
+        public class Lecture : Activity
+        {
+            public string Professor { get; set; }
+        }
 
-            public class Semester
-            {
-
-                public string SemesterName { get; set; }
-
-                public class Lecture
-                {
-                    //lecture
-                    public string Professor { get; set; }
-                    public string Section { get; set; }
-                    public string LectureStart { get; set; }
-                    public string LectureEnd { get; set; }
-                    public string[] LectureDays { get; set; }
-
-                    public string LectureBuilding { get; set; }
-                    public string LectureRoom { get; set; }
-                }
-                public class Lab
-                {
-                    //tutorial
-                    public string LabSection { get; set; }
-                    public string LabStart { get; set; }
-                    public string LabEnd { get; set; }
-                    public string[] LabDays { get; set; }
-
-                    public string LabBuilding { get; set; }
-                    public string LabRoom { get; set; }
-                }
-
-                public class Tutorial
-                {
-                    //tutorial
-                    public string TutorialSection { get; set; }
-                    public string TutorialStart { get; set; }
-                    public string TutorialEnd { get; set; }
-                    public string[] TutorialDays { get; set; }
-
-                    public string TutorialBuilding { get; set; }
-                    public string TutorialRoom { get; set; }
-                }
-            }
-            public string[] Restrictions { get; set; }
+        public class Lab : Activity {
+            public string ParentSection { get; set; }
+        }
+        public class Tutorial : Activity {
+            public string ParentSection { get; set; }
         }
     }
 
-   
-    //ALL data on profress
-    public class ProfessorsData
+    public class Professor
     {
-        public IEnumerable<Professors> professorsList { get; set; }
-        public class Professors
-        {
-            public string name { get; set;}
-            public string description { get; set; }
-            public string office { get; set; }
-            public string phone { get; set; }
-            public string email { get; set; }
-            public string website { get; set; }
-            public string image { get; set; }
-        }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Office { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+        public string Image { get; set; }
+    }
+
+    //Relationship classes
+    public class Completed
+    {
+        [Required(ErrorMessage = "Your grade is required")]
+        [RegularExpression(@"^[A-F][+-]?$", ErrorMessage = "Invalid Grade")]       
+        public string Grade { get; set; }
+
+        [Required(ErrorMessage = "Semester is required")]
+        [Range(0, 20, ErrorMessage = "Invalid semester number")]
+        public int Semester { get; set; }
+    }
+
+    public class Scheduled
+    {
+        public string SemesterSeason { get; set; }
+        public int SemesterNumber { get; set; }
     }
 
 }

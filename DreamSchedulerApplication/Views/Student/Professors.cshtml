@@ -1,4 +1,4 @@
-﻿@model DreamSchedulerApplication.Models.ProfessorsData
+﻿@model System.Collections.Generic.IEnumerable<DreamSchedulerApplication.Models.Professor>
 
 @{
     ViewBag.Title = "Professors";
@@ -15,7 +15,7 @@
         </th>
         <th></th>
     </tr>
-    @foreach (var item in Model.professorsList)
+    @foreach (var item in Model)
     {
 
 
@@ -23,12 +23,12 @@
 
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.Name)
 
             </td>
             <td>
                 @{
-        string test = @item.name;
+        string test = @item.Name;
         string t = test.Substring(0, 3);
                 }
 
@@ -50,31 +50,31 @@
                                 <div class="col-md-8">
                                     <div class="modal-body">
                                         <div>
-                                            @Html.LabelFor(ModelItem => item.name)
-                                            @Html.DisplayFor(ModelItem => item.name)
+                                            @Html.LabelFor(ModelItem => item.Name)
+                                            @Html.DisplayFor(ModelItem => item.Name)
                                         </div>
                                         <div>
-                                            @Html.LabelFor(ModelItem => item.description)
-                                            @Html.DisplayFor(ModelItem => item.description)
+                                            @Html.LabelFor(ModelItem => item.Description)
+                                            @Html.DisplayFor(ModelItem => item.Description)
                                         </div>
                                         <div>
-                                            @Html.LabelFor(ModelItem => item.office)
-                                            @Html.DisplayFor(ModelItem => item.office)
+                                            @Html.LabelFor(ModelItem => item.Office)
+                                            @Html.DisplayFor(ModelItem => item.Office)
                                         </div>
                                         <div>
-                                            @Html.LabelFor(ModelItem => item.phone)
-                                            @Html.DisplayFor(ModelItem => item.phone)
+                                            @Html.LabelFor(ModelItem => item.Phone)
+                                            @Html.DisplayFor(ModelItem => item.Phone)
                                         </div>
                                         <div>
-                                            @Html.LabelFor(ModelItem => item.email)
-                                            <a href="mailto:@Html.DisplayFor(ModelItem => item.email)">@Html.DisplayFor(ModelItem => item.email)</a>
+                                            @Html.LabelFor(ModelItem => item.Email)
+                                            <a href="mailto:@Html.DisplayFor(ModelItem => item.Email)">@Html.DisplayFor(ModelItem => item.Email)</a>
                                         </div>
                                         <div>
 
-                                            @if (item.website != null)
+                                            @if (item.Website != null)
                                             {
-                                                @Html.LabelFor(ModelItem => item.website)
-                                                <a href="@Html.DisplayFor(ModelItem => item.website)">@Html.DisplayFor(ModelItem => item.website)</a>
+                                                @Html.LabelFor(ModelItem => item.Website)
+                                                <a href="@Html.DisplayFor(ModelItem => item.Website)">@Html.DisplayFor(ModelItem => item.Website)</a>
                                             }
                                         </div>
 
@@ -85,9 +85,9 @@
                                 <div class="col-md-4">
                                     <div style="max-height:250px; max-width:250px; margin:0; padding:0;">
                                         <br />
-                                        @if (item.image != null)
+                                        @if (item.Image != null)
                                         {
-                                            <img style="height:80%; width:80%" src="@Url.Content(String.Format("~/Content/images/professorProfile/{0}.jpg",item.name)) ">
+                                            <img style="height:80%; width:80%" src="@Url.Content(String.Format("~/Content/images/professorProfile/{0}.jpg",item.Name)) ">
                                         }
 
                                     </div>

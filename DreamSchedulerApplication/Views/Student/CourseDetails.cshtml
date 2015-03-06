@@ -1,0 +1,113 @@
+﻿﻿@model DreamSchedulerApplication.Models.CourseDetails
+
+@{
+    ViewBag.Title = "Course Details";
+}
+
+<h2 style="margin-bottom: 30px">@ViewBag.Title</h2>
+
+
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-6">
+
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4 class="text-center">Course Code: @Html.DisplayFor(model => model.Course.Code)</h4>
+            </div>
+            <div class="panel-body">
+                <p><span class="label label-info">Title:</span> @Html.DisplayFor(model => model.Course.Title)</p>
+                <p><span class="label label-info">Credits:</span> @Html.DisplayFor(model => model.Course.Credits)</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-6">
+        @foreach (var item in Model.sections)
+        {
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Section: @Html.DisplayFor(modelItem => item.Lecture.Section)</h3>
+                </div>
+                <div class="container">
+                    <div class="Section" style="margin-top: 20px">
+
+                        <p><span class="label label-info">Professor:</span> @Html.DisplayFor(modelItem => item.Lecture.Professor)</p>
+                        <p>
+                            <b><span class="label label-info">Lecture:</span></b> <br />
+                            <div style="margin-left: 15px;">
+                                @{
+            var lectureDays = String.Join(", ", item.Lecture.Days);
+            @Html.DisplayFor(modelItem => lectureDays);
+                                }
+
+                                (@Html.DisplayFor(modelItem => item.Lecture.StartTime)-@Html.DisplayFor(modelItem => item.Lecture.EndTime))
+                                @Html.DisplayFor(modelItem => item.Lecture.Building)
+                                @Html.DisplayFor(modelItem => item.Lecture.Room)
+                            </div>
+
+                        </p>
+
+                        @if (item.Tutorials.Count() != 0)
+                        {
+                            <p><strong><span class="label label-info">Tutorials:</span></strong></p>
+                        }
+                        <div style="margin-left: 15px;">
+                            @foreach (var tutorial in item.Tutorials)
+                            {
+                                <p>
+                                    Section: <strong>@Html.DisplayFor(modelItem => tutorial.Section)</strong> -
+
+                                    @{
+                                var tutorialDays = String.Join(", ", tutorial.Days);
+                                @Html.DisplayFor(modelItem => tutorialDays);
+                                    }
+                                    (@Html.DisplayFor(modelItem => tutorial.StartTime)-@Html.DisplayFor(modelItem => tutorial.EndTime))
+                                    @Html.DisplayFor(modelItem => tutorial.Building)
+                                    @Html.DisplayFor(modelItem => tutorial.Room)
+                                </p>
+                            }
+                        </div>
+
+                        @if (item.Labs.Count() != 0)
+                        {
+                            <p><strong><span class="label label-info">Labs:</span></strong></p>
+                        }
+                        <div style="margin-left: 15px;">
+                            @foreach (var lab in item.Labs)
+                            {
+                                <p>
+                                    Section: <strong>@Html.DisplayFor(modelItem => lab.Section)</strong> -
+
+                                    @{
+                                var labDays = String.Join(", ", lab.Days);
+                                @Html.DisplayFor(modelItem => labDays);
+                                    }
+                                    (@Html.DisplayFor(modelItem => lab.StartTime)-@Html.DisplayFor(modelItem => lab.EndTime))
+                                    @Html.DisplayFor(modelItem => lab.Building)
+                                    @Html.DisplayFor(modelItem => lab.Room)
+                                </p>
+                            }
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        }
+    </div>
+    <div class="col-sm-4"></div>
+
+</div>
+

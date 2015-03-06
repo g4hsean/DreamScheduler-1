@@ -1,0 +1,59 @@
+﻿@model DreamSchedulerApplication.Models.Student
+@{
+    ViewBag.Title = "AccountEDIT";
+}
+
+<h2>Edit Account</h2>
+
+
+@using (Html.BeginForm("EditAccount", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Modify your information</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <fieldset>
+        <div>
+            @Html.HiddenFor(model => model.GPA)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" }, })
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" }, })
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StudentID, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StudentID, new { htmlAttributes = new { @class = "form-control" }, })
+                @Html.ValidationMessageFor(model => model.StudentID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Entry, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.Entry,
+            new SelectList(DreamSchedulerApplication.Models.RegisterViewModel.EntryOptions))
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-primary" value="Save" />
+            </div>
+        </div>
+    </fieldset>
+}
+

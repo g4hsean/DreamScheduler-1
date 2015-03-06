@@ -1,0 +1,12 @@
+﻿@model DreamSchedulerApplication.Models.Constraint
+
+
+    <tr>
+        <td class='listElement'>
+            @Html.HiddenFor(x => x.Semester, new { @readonly="readonly" })
+        </td> 
+        <td class='semesterName'></td>
+        <td>
+            @Html.EditorFor(x => x.NumberOfCourses, new { htmlAttributes = new { @class = "form-control" } })
+        </td>
+    </tr>

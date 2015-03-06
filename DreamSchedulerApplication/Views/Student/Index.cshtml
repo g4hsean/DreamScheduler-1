@@ -1,9 +1,13 @@
 ﻿@{
-    ViewBag.Title = "member Home Page";
+    ViewBag.Title = "Student Portal";
+    
+    
 }
 
+
+
 <div class="jumbotron">
-    <h1>INDEX PAGE - Home</h1>
+    <h1>Student Portal</h1>
 
 
 </div>
@@ -14,8 +18,10 @@
             <br />
             <img src="~/Content/images/sequencelogo.png" alt="...">
             <div class="caption">
-                <h2>Make sequence</h2>
-                <p><a href="#" class="btn btn-success" role="button">Button</a></p>
+                <br/>
+                <br />
+                <!--<h2>Make sequence</h2>-->
+                <p><a href="@Url.Action("Constraints", "SequenceGenerator")" class="btn btn-success" role="button">Make sequence</a></p>
             </div>
         </div>
     </div>
@@ -24,8 +30,10 @@
             <br />
             <img src="~/Content/images/courselogo.png" alt="...">
             <div class="caption">
-                <h2>Browse Courses</h2>
-                <p><a href="@Url.Action("Courses", "Student")" class="btn btn-success" role="button">Button</a></p>
+                <br />
+                <br />
+                <!--<h2>Manage Academic Record</h2>-->
+                <p><a href="@Url.Action("Index", "AcademicRecord")" class="btn btn-success" role="button">Manage Academic Record</a></p>
             </div>
         </div>
     </div>
@@ -34,9 +42,12 @@
             <br />
             <img src="~/Content/images/contactlogo.png" alt="...">
             <div class="caption">
-                <h2>Browse Professors</h2>
-                <p><a href="@Url.Action("Professors", "Student")" class="btn btn-success" role="button">Button</a></p>
+                <br />
+                <br />
+                <!--<h2>Browse Professors</h2>-->
+                <p><a href="@Url.Action("Professors", "Student")" class="btn btn-success" role="button">Browse Professors</a></p>
             </div>
         </div>
     </div>
 </div>
+
