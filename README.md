@@ -1,5 +1,6 @@
-DreamScheduler
+DreamScheduler 
 ==============
+![Alt text](https://travis-ci.org/mv740/DreamScheduler.svg?branch=master)
 
 #### TESTING SERVER 
 - dream.michalwozniak.ca (live)  
