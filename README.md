@@ -1,11 +1,6 @@
 DreamScheduler 
 ==============
 [![Build Status](https://travis-ci.org/mv740/DreamScheduler.svg?branch=master)](https://travis-ci.org/mv740/DreamScheduler)
-#### TESTING SERVER 
-- dream.michalwozniak.ca (live)  
-  - user : demodemo
-  - pass : demodemo
-  - you can also create your own `id is a 7 digit number: 'xxxxxxx'`
 
 ### Description
 
